@@ -2,6 +2,7 @@ body {
   background-color: #f8ceff;
 }
 
+/* This is made to target the #root div tag because it would not work using id selector */
 body > div {
   margin: auto;
 }
