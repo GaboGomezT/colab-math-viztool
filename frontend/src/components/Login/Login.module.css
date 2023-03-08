@@ -8,8 +8,8 @@ body {
 
 /* This is made to target the #root div tag because it would not work using id selector */
 body > div {
-    margin: 0 auto;
-  }
+  margin: 0 auto;
+}
 
 h1 {
   color: black;
