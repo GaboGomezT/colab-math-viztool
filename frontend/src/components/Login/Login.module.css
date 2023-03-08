@@ -1,15 +1,21 @@
 body {
   background-color: #f8ceff;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
 }
 
 /* This is made to target the #root div tag because it would not work using id selector */
 body > div {
-  margin: auto;
-}
+    margin: 0 auto;
+  }
 
 h1 {
   color: black;
   text-align: center;
+  font-size: 3.2em;
+  line-height: 1.1;
 }
 
 form {
@@ -37,11 +43,13 @@ form > button {
   font-size: 1.6em;
   width: 100%;
   border-radius: 0.7em;
+  color: white;
+  padding: 0.3em 0;
 }
 
 p {
-    color: black;
-    font-size: 1.2em;
-    text-align: center;
-    text-decoration: underline;
+  color: black;
+  font-size: 1.2em;
+  text-align: center;
+  text-decoration: underline;
 }
