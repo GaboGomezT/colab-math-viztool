@@ -6,14 +6,14 @@ import Login from "./components/Login/Login";
 import "./index.css";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Login />,
-  },
+	{
+		path: "/",
+		element: <Login />,
+	},
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+	<React.StrictMode>
+		<RouterProvider router={router} />
+	</React.StrictMode>
 );
