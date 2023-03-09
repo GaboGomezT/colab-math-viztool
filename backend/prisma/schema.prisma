@@ -7,60 +7,60 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Usuario {
-    id                 String           @id @default(auto()) @map("_id") @db.ObjectId
-    correo             String           @unique
-    nombre             String
-    apellidos          String
-    clave_cifrada      String
-    equipos_integrante Usuario_Equipo[]
-    equipos            Equipo[]
-    tableros           Tablero[]
-    permisos           Permiso[]
+model User {
+    id                String       @id @default(auto()) @map("_id") @db.ObjectId
+    email             String       @unique
+    firstName         String
+    lastName          String
+    encryptedPassword String
+    memberOfTeams     User_Team[]
+    ownedTeams        Team[]
+    ownedBoards       Board[]
+    permissions       Permission[]
 }
 
-model Equipo {
-    id          String           @id @default(auto()) @map("_id") @db.ObjectId
-    nombre      String
-    creado      DateTime         @default(now())
-    integrantes Usuario_Equipo[]
-    propietario Usuario          @relation(fields: [usuarioId], references: [id])
-    usuarioId   String           @db.ObjectId
-    tableros    Tablero[]
+model Team {
+    id      String      @id @default(auto()) @map("_id") @db.ObjectId
+    name    String
+    created DateTime    @default(now())
+    members User_Team[]
+    owner   User        @relation(fields: [userId], references: [id])
+    userId  String      @db.ObjectId
+    boards  Board[]
 }
 
-model Usuario_Equipo {
-    id         String  @id @default(auto()) @map("_id") @db.ObjectId
-    integrante Usuario @relation(fields: [usuarioId], references: [id])
-    equipo     Equipo  @relation(fields: [equipoId], references: [id])
-    usuarioId  String  @db.ObjectId
-    equipoId   String  @db.ObjectId
+model User_Team {
+    id     String @id @default(auto()) @map("_id") @db.ObjectId
+    member User   @relation(fields: [userId], references: [id])
+    team   Team   @relation(fields: [teamId], references: [id])
+    userId String @db.ObjectId
+    teamId String @db.ObjectId
 }
 
-model Tablero {
-    id          String    @id @default(auto()) @map("_id") @db.ObjectId
-    nombre      String
-    creado      DateTime  @default(now())
-    modificado  DateTime  @default(now()) @updatedAt
-    publico     Boolean   @default(false)
-    acceso      ACCESO?   @default(LECTURA)
-    propietario Usuario   @relation(fields: [usuarioId], references: [id])
-    usuarioId   String    @db.ObjectId
-    equipo      Equipo    @relation(fields: [equipoId], references: [id])
-    equipoId    String    @db.ObjectId
-    permisos    Permiso[]
+model Board {
+    id          String       @id @default(auto()) @map("_id") @db.ObjectId
+    name        String
+    created     DateTime     @default(now())
+    modified    DateTime     @default(now()) @updatedAt
+    isPublic    Boolean      @default(false)
+    access      ACCESS?      @default(READ)
+    owner       User         @relation(fields: [userId], references: [id])
+    userId      String       @db.ObjectId
+    team        Team         @relation(fields: [teamId], references: [id])
+    teamId      String       @db.ObjectId
+    permissions Permission[]
 }
 
-model Permiso {
-    id        String  @id @default(auto()) @map("_id") @db.ObjectId
-    usuario   Usuario @relation(fields: [usuarioId], references: [id])
-    tablero   Tablero @relation(fields: [tableroId], references: [id])
-    acceso    ACCESO  @default(LECTURA)
-    usuarioId String  @db.ObjectId
-    tableroId String  @db.ObjectId
+model Permission {
+    id      String @id @default(auto()) @map("_id") @db.ObjectId
+    user    User   @relation(fields: [userId], references: [id])
+    board   Board  @relation(fields: [boardId], references: [id])
+    access  ACCESS @default(READ)
+    userId  String @db.ObjectId
+    boardId String @db.ObjectId
 }
 
-enum ACCESO {
-    LECTURA
-    ESCRITURA
+enum ACCESS {
+    READ
+    WRITE
 }
