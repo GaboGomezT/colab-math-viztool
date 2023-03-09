@@ -1,0 +1,66 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+model Usuario {
+    id                 String           @id @default(auto()) @map("_id") @db.ObjectId
+    correo             String           @unique
+    nombre             String
+    apellidos          String
+    clave_cifrada      String
+    equipos_integrante Usuario_Equipo[]
+    equipos            Equipo[]
+    tableros           Tablero[]
+    permisos           Permiso[]
+}
+
+model Equipo {
+    id          String           @id @default(auto()) @map("_id") @db.ObjectId
+    nombre      String
+    creado      DateTime         @default(now())
+    integrantes Usuario_Equipo[]
+    propietario Usuario          @relation(fields: [usuarioId], references: [id])
+    usuarioId   String           @db.ObjectId
+    tableros    Tablero[]
+}
+
+model Usuario_Equipo {
+    id         String  @id @default(auto()) @map("_id") @db.ObjectId
+    integrante Usuario @relation(fields: [usuarioId], references: [id])
+    equipo     Equipo  @relation(fields: [equipoId], references: [id])
+    usuarioId  String  @db.ObjectId
+    equipoId   String  @db.ObjectId
+}
+
+model Tablero {
+    id          String    @id @default(auto()) @map("_id") @db.ObjectId
+    nombre      String
+    creado      DateTime  @default(now())
+    modificado  DateTime  @default(now()) @updatedAt
+    publico     Boolean   @default(false)
+    acceso      ACCESO?   @default(LECTURA)
+    propietario Usuario   @relation(fields: [usuarioId], references: [id])
+    usuarioId   String    @db.ObjectId
+    equipo      Equipo    @relation(fields: [equipoId], references: [id])
+    equipoId    String    @db.ObjectId
+    permisos    Permiso[]
+}
+
+model Permiso {
+    id        String  @id @default(auto()) @map("_id") @db.ObjectId
+    usuario   Usuario @relation(fields: [usuarioId], references: [id])
+    tablero   Tablero @relation(fields: [tableroId], references: [id])
+    acceso    ACCESO  @default(LECTURA)
+    usuarioId String  @db.ObjectId
+    tableroId String  @db.ObjectId
+}
+
+enum ACCESO {
+    LECTURA
+    ESCRITURA
+}
