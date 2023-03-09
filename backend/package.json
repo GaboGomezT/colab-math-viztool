@@ -16,6 +16,7 @@
     "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.21"
+    "nodemon": "^2.0.21",
+    "prisma": "^4.11.0"
   }
 }
