@@ -8,11 +8,21 @@ const secretKey = process.env.ACCESS_TOKEN_SECRET;
 
 authRouter.post("/signup", async (req, res) => {
 	const saltRounds = 10;
+	// Check if user with the given email already exists
+	const userExists = await prisma.user.findUnique({
+		where: {
+			email: req.body.email,
+		},
+	});
+
+	if (userExists) {
+		return res.status(400).json({ error: "Email already in use" });
+	}
 	const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
 	const newUser = await prisma.user.create({
 		data: {
-			firstName: req.body.name,
-			lastName: req.body.name,
+			firstName: req.body.firstName,
+			lastName: req.body.lastName,
 			email: req.body.email,
 			encryptedPassword: hashedPassword,
 		},
