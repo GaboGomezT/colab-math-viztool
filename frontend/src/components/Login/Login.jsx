@@ -24,12 +24,17 @@ export default function Login() {
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(formData),
+			body: JSON.stringify({
+				email: formData.email,
+				password: formData.password,
+			}),
 		})
 			.then((response) => {
 				if (!response.ok) {
+					// render some message saying the email and/or password are incorrect
 					throw new Error("Network response was not ok");
 				}
+				console.log(response.body);
 				return response.json();
 			})
 			.then((data) => {

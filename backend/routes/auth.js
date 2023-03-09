@@ -30,7 +30,7 @@ authRouter.post("/signup", async (req, res) => {
 
 	// Create and sign the JWT
 	const accessToken = jwt.sign({ id: newUser.id }, secretKey);
-	return res.header("Authorization", accessToken).send(accessToken);
+	return res.header("Authorization", accessToken).send({ accessToken });
 });
 
 authRouter.post("/login", async (req, res) => {
@@ -41,7 +41,7 @@ authRouter.post("/login", async (req, res) => {
 	});
 
 	if (!user) {
-		return res.send("Email Not Found");
+		return res.status(400).json({ error: "Invalid Password or Email" });
 	}
 
 	const passwordCompare = bcrypt.compareSync(
@@ -51,9 +51,9 @@ authRouter.post("/login", async (req, res) => {
 	const accessToken = jwt.sign({ id: user.id }, secretKey);
 
 	if (!passwordCompare) {
-		return res.send("Invalid Password");
+		return res.status(400).json({ error: "Invalid Password or Email" });
 	} else {
-		return res.header("Authorization", accessToken).send(accessToken);
+		return res.header("Authorization", accessToken).send({ accessToken });
 	}
 });
 
