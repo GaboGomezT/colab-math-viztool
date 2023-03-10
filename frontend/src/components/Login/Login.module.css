@@ -63,3 +63,11 @@ p {
 	text-align: center;
 	text-decoration: underline;
 }
+
+.error {
+	color: red;
+	font-weight: bolder;
+	font-size: 1.2rem;
+	font-style: italic;
+	text-align: center;
+}

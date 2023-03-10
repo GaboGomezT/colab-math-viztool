@@ -1,12 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import "./Login.module.css";
+import classes from "./Login.module.css";
 
 export default function Login() {
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
 	});
+	const [error, setError] = useState(false);
 
 	function handleChange(event) {
 		setFormData((prevFormData) => {
@@ -31,10 +32,8 @@ export default function Login() {
 		})
 			.then((response) => {
 				if (!response.ok) {
-					// render some message saying the email and/or password are incorrect
 					throw new Error("Network response was not ok");
 				}
-				console.log(response.body);
 				return response.json();
 			})
 			.then((data) => {
@@ -42,6 +41,7 @@ export default function Login() {
 			})
 			.catch((error) => {
 				console.error("There was a problem with the fetch operation:", error);
+				setError(true);
 			});
 	}
 
@@ -59,6 +59,9 @@ export default function Login() {
 					id="password"
 				/>
 				<button>Entrar</button>
+				{error && (
+					<div className={classes.error}>Contraseña o Correo Incorrecto</div>
+				)}
 			</form>
 			<p>Crear cuenta</p>
 		</main>
