@@ -2,6 +2,9 @@ const prisma = require("../db.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const express = require("express");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const authRouter = express.Router();
 const secretKey = process.env.ACCESS_TOKEN_SECRET;
