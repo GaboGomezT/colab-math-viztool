@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import classes from "./Login.module.css";
 
 export default function Login() {
@@ -63,7 +64,9 @@ export default function Login() {
 					<div className={classes.error}>Contraseña o Correo Incorrecto</div>
 				)}
 			</form>
-			<p>Crear cuenta</p>
+			<p>
+				<Link to="/crear-cuenta">Crear Cuenta</Link>
+			</p>
 		</main>
 	);
 }
