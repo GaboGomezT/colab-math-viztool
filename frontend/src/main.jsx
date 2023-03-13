@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
+import Dashboard from "./components/Dashboard/Dashboard";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
 	{
 		path: "/crear-cuenta",
 		element: <Signup />,
+	},
+	{
+		path: "/",
+		element: <Dashboard />,
 	},
 ]);
 
