@@ -1,0 +1,90 @@
+.board-view {
+	margin: 1em 1.5em;
+}
+.view-title {
+	font-size: 3rem;
+	font-weight: bold;
+}
+.options {
+	display: flex;
+	justify-content: space-between;
+	margin: 1em 0;
+}
+
+.board-btn-icon {
+	margin: 0 auto;
+	width: 100%;
+	font-size: 3rem;
+	color: white;
+	margin-bottom: 5px;
+}
+
+.new-board-btn {
+	border: none;
+	background-color: #bd78f2;
+	height: 150px;
+	width: 150px;
+	opacity: 0.6;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+	border-radius: 1em;
+}
+
+.board-btn-text {
+	color: white;
+	text-decoration: none;
+	margin-top: 1em;
+	font-weight: bold;
+}
+
+.drop-down {
+	align-self: flex-end;
+}
+
+.drop-down label {
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+.drop-down select {
+	font-size: 1.2rem;
+	border: none;
+	background-color: whitesmoke;
+}
+
+.board {
+	display: flex;
+	justify-content: space-between;
+	border: black 2px solid;
+	padding: 1em;
+	border-radius: 1em;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+	margin-bottom: 1.5em;
+}
+
+.board-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.info-group {
+	font-weight: bolder;
+	font-size: 1.3rem;
+}
+
+.info-name {
+	margin-top: 0.5em;
+	font-size: 1.2rem;
+}
+
+.info-dates {
+	font-size: 0.8rem;
+	margin-top: 1em;
+}
+
+.info-icon {
+	align-self: center;
+	font-size: 2.5rem;
+}
