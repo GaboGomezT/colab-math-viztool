@@ -10,7 +10,7 @@ import "./index.css";
 
 const router = createBrowserRouter([
 	{
-		path: "/iniciar-sesion",
+		path: "/",
 		element: <Login />,
 	},
 	{

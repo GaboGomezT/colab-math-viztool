@@ -1,12 +1,23 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import BoardInfo from "./BoardInfo.jsx";
 import "./Boards.modules.css";
 
 export default function Boards() {
 	const [selectedValue, setSelectedValue] = useState("last-modified");
+	const [accessToken, setAccessToken] = useState(null);
+	const [usersBoards, setUsersBoards] = useState([]);
+
+	useEffect(() => {
+		const authToken = localStorage.getItem("access_token");
+		if (!authToken) {
+			navigate("/");
+		}
+		setAccessToken(authToken);
+	}, []);
+
 	return (
 		<div className="board-view">
 			<span className="view-title">Tus Tableros</span>
