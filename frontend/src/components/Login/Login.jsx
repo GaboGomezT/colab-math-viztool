@@ -47,7 +47,7 @@ export default function Login() {
 	}
 
 	return (
-		<main>
+		<div className={classes.auth}>
 			<h1>Iniciar Sesión</h1>
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="email">Correo</label>
@@ -67,6 +67,6 @@ export default function Login() {
 			<p>
 				<Link to="/crear-cuenta">Crear Cuenta</Link>
 			</p>
-		</main>
+		</div>
 	);
 }

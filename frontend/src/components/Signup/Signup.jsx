@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import classes from "./Signup.module.css";
+import classes from "../Login/Login.module.css";
 
 export default function Signup() {
 	const [formData, setFormData] = useState({
@@ -54,7 +54,7 @@ export default function Signup() {
 	}
 
 	return (
-		<main>
+		<div className={classes.auth}>
 			<h1>Crear Cuenta</h1>
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="email">Correo</label>
@@ -100,6 +100,6 @@ export default function Signup() {
 				<button>Crear</button>
 				{errorMessage && <div className={classes.error}>{errorMessage}</div>}
 			</form>
-		</main>
+		</div>
 	);
 }
