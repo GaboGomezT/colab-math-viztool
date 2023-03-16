@@ -32,8 +32,34 @@ boardRouter.get("/boards", verifyToken, async (req, res) => {
 
 	// Combine and return ownedBoards and teamBoards
 	const allBoards = [...ownedBoards, ...teamBoards];
-
 	res.status(200).json({ allBoards });
+});
+
+boardRouter.post("/boards", verifyToken, async (req, res) => {
+	console.log(req.body);
+	const { name, teamId, isPublic } = req.body;
+
+	if (!name) {
+		return res.status(400).json({ error: "Missing required fields: name" });
+	}
+
+	try {
+		const boardData = {
+			name,
+			owner: { connect: { id: req.user.id } },
+			isPublic: isPublic || false,
+			...(teamId ? { team: { connect: { id: teamId } } } : {}),
+		};
+
+		const newBoard = await prisma.board.create({
+			data: boardData,
+		});
+
+		res.status(201).json(newBoard);
+	} catch (error) {
+		console.error("Error creating board:", error);
+		res.status(500).json({ error: "Error creating board." });
+	}
 });
 
 module.exports = boardRouter;

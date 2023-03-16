@@ -87,3 +87,28 @@
 	align-self: center;
 	font-size: 2.5rem;
 }
+
+.modal-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.modal-form {
+	background-color: #fff;
+	padding: 2rem;
+	border-radius: 4px;
+	width: 400px;
+	border-radius: 1em;
+	border: 2px solid black;
+}
+
+.modal-form button {
+	margin-bottom: 1em;
+}
