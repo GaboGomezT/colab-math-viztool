@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import classes from "./Login.module.css";
 
 export default function Login() {
@@ -9,6 +9,7 @@ export default function Login() {
 		password: "",
 	});
 	const [error, setError] = useState(false);
+	const navigate = useNavigate();
 
 	function handleChange(event) {
 		setFormData((prevFormData) => {
@@ -38,7 +39,8 @@ export default function Login() {
 				return response.json();
 			})
 			.then((data) => {
-				console.log(data);
+				localStorage.setItem("access_token", data.accessToken);
+				navigate("/tableros");
 			})
 			.catch((error) => {
 				console.error("There was a problem with the fetch operation:", error);

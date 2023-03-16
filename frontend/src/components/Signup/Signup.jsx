@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import classes from "../Login/Login.module.css";
 
 export default function Signup() {
@@ -11,6 +12,7 @@ export default function Signup() {
 		passwordConfirmation: "",
 	});
 	const [errorMessage, setErrorMessage] = useState(false);
+	const navigate = useNavigate();
 
 	function handleChange(event) {
 		setFormData((prevFormData) => {
@@ -39,13 +41,15 @@ export default function Signup() {
 			}),
 		})
 			.then((response) => {
+				console.log(response);
 				if (!response.ok) {
 					throw new Error("Network response was not ok");
 				}
 				return response.json();
 			})
 			.then((data) => {
-				console.log(data);
+				localStorage.setItem("access_token", data.accessToken);
+				navigate("/tableros");
 			})
 			.catch((error) => {
 				console.error("There was a problem with the fetch operation:", error);
