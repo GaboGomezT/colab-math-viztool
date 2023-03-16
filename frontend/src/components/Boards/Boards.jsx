@@ -18,6 +18,30 @@ export default function Boards() {
 		setAccessToken(authToken);
 	}, []);
 
+	useEffect(() => {
+		if (accessToken) {
+			fetch(`${import.meta.env.VITE_BACKEND_API_URL}/boards`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					"x-access-token": accessToken,
+				},
+			})
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error("Network response was not ok");
+					}
+					return response.json();
+				})
+				.then((data) => {
+					console.log(data);
+				})
+				.catch((error) => {
+					console.error("There was a problem with the fetch operation:", error);
+				});
+		}
+	}, [accessToken]);
+
 	return (
 		<div className="board-view">
 			<span className="view-title">Tus Tableros</span>

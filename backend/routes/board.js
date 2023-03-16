@@ -9,10 +9,31 @@ boardRouter.get("/boards", verifyToken, async (req, res) => {
 		where: {
 			id: req.user.id,
 		},
+		include: {
+			ownedBoards: true,
+			memberOfTeams: {
+				include: {
+					team: {
+						include: {
+							boards: true,
+						},
+					},
+				},
+			},
+		},
 	});
-	console.log(user);
+	// Extract ownedBoards
+	const ownedBoards = user.ownedBoards;
 
-	res.send("Protected route accessed.");
+	// Extract teamBoards
+	const teamBoards = user.memberOfTeams.flatMap(
+		(userTeam) => userTeam.team.boards
+	);
+
+	// Combine and return ownedBoards and teamBoards
+	const allBoards = [...ownedBoards, ...teamBoards];
+
+	res.status(200).json({ allBoards });
 });
 
 module.exports = boardRouter;
