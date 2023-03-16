@@ -82,12 +82,29 @@ export default function Boards() {
 				}
 			);
 			const data = await response.json();
-			console.log("Board created:", data);
+			setUsersBoards((prev) => [...prev, data]);
 			setShowModal(false);
 		} catch (error) {
 			console.error("Error creating board:", error);
 		}
 	};
+
+	const boardComponents = usersBoards.map((board) => {
+		const created = new Date(board.created);
+		const formattedCreated = created.toLocaleDateString("es-MX");
+		const modified = new Date(board.modified);
+		const formattedModified = modified.toLocaleDateString("es-MX");
+		// Missing team prop
+		// TODO: Add team prop when implementing team feature
+		return (
+			<BoardInfo
+				key={board.id}
+				name={board.name}
+				createdDate={formattedCreated}
+				modifiedDate={formattedModified}
+			/>
+		);
+	});
 	return (
 		<div className="board-view">
 			<span className="view-title">Tus Tableros</span>
@@ -118,14 +135,7 @@ export default function Boards() {
 					closeModal={() => setShowModal(false)}
 				/>
 			)}
-			<div className="boards">
-				<BoardInfo
-					group={"1CM2"}
-					name={"Producto punto entre dos vectores"}
-					createdDate={"05/03/2023"}
-					modifiedDate={"06/03/2023"}
-				/>
-			</div>
+			<div className="boards">{boardComponents}</div>
 		</div>
 	);
 }
