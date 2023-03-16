@@ -42,9 +42,9 @@ export default function CreateBoardModal({
 						onChange={handleCheckboxChange}
 					/>
 				</div>
-				<button type="submit">Create</button>
+				<button type="submit">Crear</button>
 				<button type="button" onClick={closeModal}>
-					Cancel
+					Cancelar
 				</button>
 			</form>
 		</div>
