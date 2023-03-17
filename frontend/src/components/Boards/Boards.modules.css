@@ -53,6 +53,11 @@
 	background-color: whitesmoke;
 }
 
+.boards {
+	overflow: auto;
+	max-height: 65vh;
+}
+
 .board {
 	display: flex;
 	justify-content: space-between;
