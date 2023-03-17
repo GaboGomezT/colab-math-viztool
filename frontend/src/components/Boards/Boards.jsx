@@ -41,7 +41,7 @@ export default function Boards() {
 					return response.json();
 				})
 				.then((data) => {
-					setUsersBoards(data.allBoards);
+					orderBoards(data.allBoards);
 				})
 				.catch((error) => {
 					console.error("There was a problem with the fetch operation:", error);
@@ -56,6 +56,27 @@ export default function Boards() {
 			isPublic: false,
 		});
 	}, [showModal]);
+
+	useEffect(() => {
+		orderBoards(usersBoards.slice());
+	}, [selectedValue]);
+
+	function orderBoards(boards) {
+		// Right now last-modified and last-created will give the same result because currently there is no way to modify a board
+		// Test this functionality when the board is implemented
+		let orderFunction;
+		if (selectedValue === "last-modified") {
+			orderFunction = (a, b) => new Date(b.modified) - new Date(a.modified);
+		}
+		if (selectedValue === "last-created") {
+			orderFunction = (a, b) => new Date(b.created) - new Date(a.created);
+		}
+		if (selectedValue === "first-created") {
+			orderFunction = (a, b) => new Date(a.created) - new Date(b.created);
+		}
+		const orderedBoards = boards.sort(orderFunction);
+		setUsersBoards(orderedBoards);
+	}
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -82,7 +103,7 @@ export default function Boards() {
 				}
 			);
 			const data = await response.json();
-			setUsersBoards((prev) => [...prev, data]);
+			orderBoards([...usersBoards, data]);
 			setShowModal(false);
 		} catch (error) {
 			console.error("Error creating board:", error);
