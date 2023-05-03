@@ -1,14 +1,10 @@
-body {
+.auth {
 	background-color: #f8ceff;
 	display: flex;
+	flex-direction: column;
 	place-items: center;
-	min-width: 320px;
-	min-height: 100vh;
-}
-
-/* This is made to target the #root div tag because it would not work using id selector */
-body > div {
-	margin: 0 auto;
+	height: 100vh;
+	justify-content: center;
 }
 
 h1 {

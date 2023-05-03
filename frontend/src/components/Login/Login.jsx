@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import classes from "./Login.module.css";
 
 export default function Login() {
@@ -8,6 +9,7 @@ export default function Login() {
 		password: "",
 	});
 	const [error, setError] = useState(false);
+	const navigate = useNavigate();
 
 	function handleChange(event) {
 		setFormData((prevFormData) => {
@@ -37,7 +39,8 @@ export default function Login() {
 				return response.json();
 			})
 			.then((data) => {
-				console.log(data);
+				localStorage.setItem("access_token", data.accessToken);
+				navigate("/tableros");
 			})
 			.catch((error) => {
 				console.error("There was a problem with the fetch operation:", error);
@@ -46,7 +49,7 @@ export default function Login() {
 	}
 
 	return (
-		<main>
+		<div className={classes.auth}>
 			<h1>Iniciar Sesión</h1>
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="email">Correo</label>
@@ -63,7 +66,9 @@ export default function Login() {
 					<div className={classes.error}>Contraseña o Correo Incorrecto</div>
 				)}
 			</form>
-			<p>Crear cuenta</p>
-		</main>
+			<p>
+				<Link to="/crear-cuenta">Crear Cuenta</Link>
+			</p>
+		</div>
 	);
 }
