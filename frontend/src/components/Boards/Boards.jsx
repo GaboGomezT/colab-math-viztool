@@ -16,6 +16,7 @@ export default function Boards() {
 		teamId: "",
 		isPublic: false,
 	});
+	const [teamOptions, setTeamOptions] = useState([]);
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
@@ -44,7 +45,33 @@ export default function Boards() {
 					orderBoards(data.allBoards);
 				})
 				.catch((error) => {
-					console.error("There was a problem with the fetch operation:", error);
+					console.error(
+						"There was a problem with the fetch operation (getting boards):",
+						error
+					);
+				});
+
+			fetch(`${import.meta.env.VITE_BACKEND_API_URL}/teams`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					"x-access-token": accessToken,
+				},
+			})
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error("Network response was not ok");
+					}
+					return response.json();
+				})
+				.then((data) => {
+					setTeamOptions(data.teams);
+				})
+				.catch((error) => {
+					console.error(
+						"There was a problem with the fetch operation (getting teams):",
+						error
+					);
 				});
 		}
 	}, [accessToken]);
@@ -154,6 +181,7 @@ export default function Boards() {
 					handleCheckboxChange={handleCheckboxChange}
 					handleSubmit={handleSubmit}
 					closeModal={() => setShowModal(false)}
+					teamOptions={teamOptions}
 				/>
 			)}
 			<div className="boards">{boardComponents}</div>
