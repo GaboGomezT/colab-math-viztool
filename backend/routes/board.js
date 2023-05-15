@@ -36,7 +36,6 @@ boardRouter.get("/boards", verifyToken, async (req, res) => {
 });
 
 boardRouter.post("/boards", verifyToken, async (req, res) => {
-	console.log(req.body);
 	const { name, teamId, isPublic } = req.body;
 
 	if (!name) {

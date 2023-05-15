@@ -39,7 +39,6 @@ export default function Teams() {
 					return response.json();
 				})
 				.then((data) => {
-					console.log(data);
 					orderTeams(data.teams);
 				})
 				.catch((error) => {
