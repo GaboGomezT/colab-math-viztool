@@ -14,13 +14,13 @@ export default function Dashboard(props) {
 			{props.children}
 			<div className={classes.navbar}>
 				<div>
-					<NavLink>
+					<NavLink to="/tableros">
 						<FontAwesomeIcon icon={faChalkboard} className={classes.icon} />
 						Tableros
 					</NavLink>
 				</div>
 				<div>
-					<NavLink>
+					<NavLink to="/equipos">
 						<FontAwesomeIcon icon={faUsers} className={classes.icon} />
 						Equipos
 					</NavLink>

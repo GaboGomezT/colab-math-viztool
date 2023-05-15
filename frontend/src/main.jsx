@@ -6,6 +6,7 @@ import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Boards from "./components/Boards/Boards";
+import Teams from "./components/Teams/Teams";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -22,6 +23,14 @@ const router = createBrowserRouter([
 		element: (
 			<Dashboard>
 				<Boards />
+			</Dashboard>
+		),
+	},
+	{
+		path: "/equipos",
+		element: (
+			<Dashboard>
+				<Teams />
 			</Dashboard>
 		),
 	},
