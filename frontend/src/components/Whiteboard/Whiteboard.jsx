@@ -4,6 +4,7 @@ import "./Whiteboard.modules.css";
 
 const Whiteboard = () => {
 	const canvasRef = useRef(null);
+	const [canvas, setCanvas] = useState(null);
 	const [currentColor, setCurrentColor] = useState("#000000"); // Initial color: black
 	const [currentBrushSize, setCurrentBrushSize] = useState(5); // Initial brush size: 5
 
@@ -19,12 +20,21 @@ const Whiteboard = () => {
 		// Set free drawing brush options
 		canvas.freeDrawingBrush.width = currentBrushSize;
 		canvas.freeDrawingBrush.color = currentColor;
-
+		setCanvas(canvas);
 		return () => {
 			// Cleanup on component unmount
 			canvas.dispose();
+			setCanvas(null);
 		};
-	}, [currentColor, currentBrushSize]);
+	}, []);
+
+	useEffect(() => {
+		if (canvas) {
+			canvas.freeDrawingBrush.width = currentBrushSize;
+			canvas.freeDrawingBrush.color = currentColor;
+			setCanvas(canvas);
+		}
+	}, [currentBrushSize, currentColor]);
 
 	const handleColorChange = (color) => {
 		setCurrentColor(color);
@@ -34,6 +44,11 @@ const Whiteboard = () => {
 		setCurrentBrushSize(size);
 	};
 
+	const exportCanvas = () => {
+		// Get canvas data as JSON
+		const canvasData = JSON.stringify(canvas.toJSON());
+		console.log(canvasData);
+	};
 	return (
 		<div>
 			<div>
@@ -62,6 +77,7 @@ const Whiteboard = () => {
 					<option value={10}>10px</option>
 				</select>
 			</div>
+			<button onClick={exportCanvas}>Export</button>
 			<canvas className="canvas" ref={canvasRef} />
 		</div>
 	);
