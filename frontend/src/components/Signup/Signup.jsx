@@ -62,6 +62,7 @@ export default function Signup() {
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="email">Correo</label>
 				<input
+					className="auth-input"
 					type="email"
 					onChange={handleChange}
 					name="email"
@@ -70,6 +71,7 @@ export default function Signup() {
 				/>
 				<label htmlFor="firstName">Nombre</label>
 				<input
+					className="auth-input"
 					type="text"
 					onChange={handleChange}
 					name="firstName"
@@ -78,6 +80,7 @@ export default function Signup() {
 				/>
 				<label htmlFor="lastName">Apellidos</label>
 				<input
+					className="auth-input"
 					type="text"
 					onChange={handleChange}
 					name="lastName"
@@ -86,6 +89,7 @@ export default function Signup() {
 				/>
 				<label htmlFor="password">Contraseña</label>
 				<input
+					className="auth-input"
 					type="password"
 					onChange={handleChange}
 					name="password"
@@ -94,6 +98,7 @@ export default function Signup() {
 				/>
 				<label htmlFor="passwordConfirmation">Confirma Contraseña</label>
 				<input
+					className="auth-input"
 					type="password"
 					onChange={handleChange}
 					name="passwordConfirmation"
