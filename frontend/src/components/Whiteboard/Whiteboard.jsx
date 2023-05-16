@@ -1,126 +1,70 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { fabric } from "fabric";
+import "./Whiteboard.modules.css";
 
-export default function Whiteboard() {
-	const { boardId } = useParams();
+const Whiteboard = () => {
 	const canvasRef = useRef(null);
-	const [color, setColor] = useState("#000000");
-	const [brushSize, setBrushSize] = useState(3);
-	let ctx;
+	const [currentColor, setCurrentColor] = useState("#000000"); // Initial color: black
+	const [currentBrushSize, setCurrentBrushSize] = useState(5); // Initial brush size: 5
 
 	useEffect(() => {
-		const canvas = canvasRef.current;
-		ctx = canvas.getContext("2d");
+		const canvas = new fabric.Canvas(canvasRef.current);
 
-		// Set initial drawing styles
-		ctx.strokeStyle = color;
-		ctx.lineWidth = brushSize;
-		ctx.lineCap = "round";
-	}, [color, brushSize]);
+		// Set canvas dimensions
+		canvas.setDimensions({ width: 800, height: 600 });
 
-	const handleStart = (event) => {
-		const canvas = canvasRef.current;
-		const rect = canvas.getBoundingClientRect();
-		const x = event.clientX - rect.left;
-		const y = event.clientY - rect.top;
+		// Enable free drawing mode
+		canvas.isDrawingMode = true;
 
-		ctx.beginPath();
-		ctx.moveTo(x, y);
+		// Set free drawing brush options
+		canvas.freeDrawingBrush.width = currentBrushSize;
+		canvas.freeDrawingBrush.color = currentColor;
 
-		canvas.addEventListener("mousemove", handleMove);
-		canvas.addEventListener("mouseup", handleEnd);
+		return () => {
+			// Cleanup on component unmount
+			canvas.dispose();
+		};
+	}, [currentColor, currentBrushSize]);
+
+	const handleColorChange = (color) => {
+		setCurrentColor(color);
 	};
 
-	const handleMove = (event) => {
-		const canvas = canvasRef.current;
-		const rect = canvas.getBoundingClientRect();
-		const x = event.clientX - rect.left;
-		const y = event.clientY - rect.top;
-
-		ctx.lineTo(x, y);
-		ctx.stroke();
-	};
-
-	const handleEnd = () => {
-		const canvas = canvasRef.current;
-		canvas.removeEventListener("mousemove", handleMove);
-		canvas.removeEventListener("mouseup", handleEnd);
-	};
-
-	const handleTouchStart = (event) => {
-		const canvas = canvasRef.current;
-		const rect = canvas.getBoundingClientRect();
-
-		if (event.touches.length > 0) {
-			const x = event.touches[0].clientX - rect.left;
-			const y = event.touches[0].clientY - rect.top;
-
-			ctx.beginPath();
-			ctx.moveTo(x, y);
-
-			canvas.addEventListener("touchmove", handleTouchMove);
-			canvas.addEventListener("touchend", handleTouchEnd);
-		}
-	};
-
-	const handleTouchMove = (event) => {
-		const canvas = canvasRef.current;
-		const rect = canvas.getBoundingClientRect();
-		const x = event.touches[0].clientX - rect.left;
-		const y = event.touches[0].clientY - rect.top;
-
-		ctx.lineTo(x, y);
-		ctx.stroke();
-	};
-
-	const handleTouchEnd = () => {
-		const canvas = canvasRef.current;
-		canvas.removeEventListener("touchmove", handleTouchMove);
-		canvas.removeEventListener("touchend", handleTouchEnd);
-	};
-
-	const handleClear = () => {
-		const canvas = canvasRef.current;
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-	};
-
-	const handleColorChange = (event) => {
-		setColor(event.target.value);
-	};
-
-	const handleBrushSizeChange = (event) => {
-		setBrushSize(Number(event.target.value));
+	const handleBrushSizeChange = (size) => {
+		setCurrentBrushSize(size);
 	};
 
 	return (
 		<div>
-			<canvas
-				ref={canvasRef}
-				width={800}
-				height={600}
-				style={{ border: "1px solid #000000" }}
-				onMouseDown={handleStart}
-				onTouchStart={handleTouchStart}
-			/>
 			<div>
-				<label htmlFor="color">Color:</label>
-				<input
-					type="color"
-					id="color"
-					value={color}
-					onChange={handleColorChange}
-				/>
+				<label>Color:</label>
+				<select
+					value={currentColor}
+					onChange={(e) => handleColorChange(e.target.value)}
+				>
+					<option value="#000000">Black</option>
+					<option value="#ff0000">Red</option>
+					<option value="#00ff00">Green</option>
+					<option value="#0000ff">Blue</option>
+					<option value="#ffff00">Yellow</option>
+					<option value="#ff00ff">Magenta</option>
+				</select>
 			</div>
 			<div>
-				<label htmlFor="brushSize">Brush Size:</label>
-				<input
-					type="number"
-					id="brushSize"
-					value={brushSize}
-					onChange={handleBrushSizeChange}
-				/>
+				<label>Brush Size:</label>
+				<select
+					value={currentBrushSize}
+					onChange={(e) => handleBrushSizeChange(Number(e.target.value))}
+				>
+					<option value={1}>1px</option>
+					<option value={3}>3px</option>
+					<option value={5}>5px</option>
+					<option value={10}>10px</option>
+				</select>
 			</div>
-			<button onClick={handleClear}>Clear</button>
+			<canvas className="canvas" ref={canvasRef} />
 		</div>
 	);
-}
+};
+
+export default Whiteboard;
