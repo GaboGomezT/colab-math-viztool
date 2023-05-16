@@ -142,14 +142,14 @@ export default function Boards() {
 		const formattedCreated = created.toLocaleDateString("es-MX");
 		const modified = new Date(board.modified);
 		const formattedModified = modified.toLocaleDateString("es-MX");
-		// Missing team prop
-		// TODO: Add team prop when implementing team feature
+		const team = teamOptions.find((team) => team.id === board.teamId);
 		return (
 			<BoardInfo
 				key={board.id}
 				name={board.name}
 				createdDate={formattedCreated}
 				modifiedDate={formattedModified}
+				group={team ? team.name : "Sin equipo"}
 			/>
 		);
 	});
