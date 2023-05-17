@@ -146,6 +146,7 @@ export default function Boards() {
 		return (
 			<BoardInfo
 				key={board.id}
+				id={board.id}
 				name={board.name}
 				createdDate={formattedCreated}
 				modifiedDate={formattedModified}
