@@ -1,14 +1,21 @@
 import React, { useRef, useEffect, useState } from "react";
 import { fabric } from "fabric";
+import { useParams } from "react-router-dom";
+import io from "socket.io-client";
 import "./Whiteboard.modules.css";
 
-const Whiteboard = () => {
+export default function Whiteboard() {
+	let { boardId } = useParams();
 	const canvasRef = useRef(null);
 	const [canvas, setCanvas] = useState(null);
 	const [currentColor, setCurrentColor] = useState("#000000"); // Initial color: black
 	const [currentBrushSize, setCurrentBrushSize] = useState(5); // Initial brush size: 5
+	const socket = useRef(null);
 
 	useEffect(() => {
+		socket.current = io("http://localhost:3000"); // Replace with your backend server URL
+		socket.current.emit("joinSession", boardId);
+
 		const canvas = new fabric.Canvas(canvasRef.current);
 
 		// Set canvas dimensions
@@ -21,10 +28,19 @@ const Whiteboard = () => {
 		canvas.freeDrawingBrush.width = currentBrushSize;
 		canvas.freeDrawingBrush.color = currentColor;
 		setCanvas(canvas);
+
+		// Handle canvas updates from server
+		socket.current.on("canvasUpdate", (data) => {
+			canvas.loadFromJSON(data, () => {
+				canvas.renderAll();
+			});
+		});
+
 		return () => {
 			// Cleanup on component unmount
 			canvas.dispose();
 			setCanvas(null);
+			socket.current.disconnect();
 		};
 	}, []);
 
@@ -44,11 +60,15 @@ const Whiteboard = () => {
 		setCurrentBrushSize(size);
 	};
 
-	const exportCanvas = () => {
-		// Get canvas data as JSON
-		const canvasData = JSON.stringify(canvas.toJSON());
-		console.log(canvasData);
+	const saveCanvas = () => {
+		if (canvas) {
+			const canvasData = JSON.stringify(canvas.toJSON());
+
+			// Emit canvas data to the server
+			socket.current.emit("canvasUpdate", canvasData, boardId);
+		}
 	};
+
 	return (
 		<div>
 			<div>
@@ -67,6 +87,7 @@ const Whiteboard = () => {
 			</div>
 			<div>
 				<label>Brush Size:</label>
+
 				<select
 					value={currentBrushSize}
 					onChange={(e) => handleBrushSizeChange(Number(e.target.value))}
@@ -77,10 +98,11 @@ const Whiteboard = () => {
 					<option value={10}>10px</option>
 				</select>
 			</div>
-			<button onClick={exportCanvas}>Export</button>
+			<div>
+				<button onClick={saveCanvas}>Export</button>
+			</div>
+
 			<canvas className="canvas" ref={canvasRef} />
 		</div>
 	);
-};
-
-export default Whiteboard;
+}
