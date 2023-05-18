@@ -28,7 +28,7 @@ export default function Signup() {
 		if (formData.password !== formData.passwordConfirmation) {
 			setErrorMessage("Contraseñas no coinciden");
 		}
-		fetch(`${import.meta.env.VITE_BACKEND_API_URL}/signup`, {
+		fetch(`${import.meta.env.VITE_BACKEND_API_URL}:3000/signup`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

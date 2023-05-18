@@ -25,7 +25,7 @@ export default function Teams() {
 
 	useEffect(() => {
 		if (accessToken) {
-			fetch(`${import.meta.env.VITE_BACKEND_API_URL}/teams`, {
+			fetch(`${import.meta.env.VITE_BACKEND_API_URL}:3000/teams`, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -80,7 +80,7 @@ export default function Teams() {
 		e.preventDefault();
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_API_URL}/teams`,
+				`${import.meta.env.VITE_BACKEND_API_URL}:3000/teams`,
 				{
 					method: "POST",
 					headers: {

@@ -13,7 +13,7 @@ export default function Whiteboard() {
 	const socket = useRef(null);
 
 	useEffect(() => {
-		socket.current = io("http://localhost:3000"); // Replace with your backend server URL
+		socket.current = io(`${import.meta.env.VITE_BACKEND_API_URL}:3000`); // Replace with your backend server URL
 		socket.current.emit("joinSession", boardId);
 
 		const canvas = new fabric.Canvas(canvasRef.current);
@@ -61,8 +61,12 @@ export default function Whiteboard() {
 	};
 
 	const saveCanvas = () => {
+		console.log("saveCanvas");
+		console.log(canvas);
 		if (canvas) {
 			const canvasData = JSON.stringify(canvas.toJSON());
+			console.log(canvasData);
+			console.log(boardId);
 
 			// Emit canvas data to the server
 			socket.current.emit("canvasUpdate", canvasData, boardId);
