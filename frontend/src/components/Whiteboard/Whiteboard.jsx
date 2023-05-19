@@ -19,7 +19,7 @@ export default function Whiteboard() {
 		const canvas = new fabric.Canvas(canvasRef.current);
 
 		// Set canvas dimensions
-		canvas.setDimensions({ width: 800, height: 600 });
+		canvas.setDimensions({ width: 1100, height: 600 });
 
 		// Enable free drawing mode
 		canvas.isDrawingMode = true;
@@ -61,52 +61,59 @@ export default function Whiteboard() {
 	};
 
 	const saveCanvas = () => {
-		console.log("saveCanvas");
-		console.log(canvas);
 		if (canvas) {
 			const canvasData = JSON.stringify(canvas.toJSON());
-			console.log(canvasData);
-			console.log(boardId);
 
 			// Emit canvas data to the server
 			socket.current.emit("canvasUpdate", canvasData, boardId);
 		}
 	};
 
+	useEffect(() => {
+		if (canvas) {
+			canvas.on("path:created", saveCanvas);
+		}
+	}, [canvas]);
 	return (
-		<div>
-			<div>
-				<label>Color:</label>
-				<select
-					value={currentColor}
-					onChange={(e) => handleColorChange(e.target.value)}
-				>
-					<option value="#000000">Black</option>
-					<option value="#ff0000">Red</option>
-					<option value="#00ff00">Green</option>
-					<option value="#0000ff">Blue</option>
-					<option value="#ffff00">Yellow</option>
-					<option value="#ff00ff">Magenta</option>
-				</select>
-			</div>
-			<div>
-				<label>Brush Size:</label>
+		<div className="whiteboard">
+			<div className="canvas-navigation"></div>
+			<div className="canvas-parent">
+				<div className="left-side-bar">
+					<div className="tool-bar">
+						<div>
+							<label>Color:</label>
+							<select
+								value={currentColor}
+								onChange={(e) => handleColorChange(e.target.value)}
+							>
+								<option value="#000000">Black</option>
+								<option value="#ff0000">Red</option>
+								<option value="#00ff00">Green</option>
+								<option value="#0000ff">Blue</option>
+								<option value="#ffff00">Yellow</option>
+								<option value="#ff00ff">Magenta</option>
+							</select>
+						</div>
+						<div>
+							<label>Brush Size:</label>
 
-				<select
-					value={currentBrushSize}
-					onChange={(e) => handleBrushSizeChange(Number(e.target.value))}
-				>
-					<option value={1}>1px</option>
-					<option value={3}>3px</option>
-					<option value={5}>5px</option>
-					<option value={10}>10px</option>
-				</select>
+							<select
+								value={currentBrushSize}
+								onChange={(e) => handleBrushSizeChange(Number(e.target.value))}
+							>
+								<option value={1}>1px</option>
+								<option value={3}>3px</option>
+								<option value={5}>5px</option>
+								<option value={10}>10px</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<canvas className="canvas" ref={canvasRef} />
+				<div className="right-side-bar">
+					<div className="access-management">manage</div>
+				</div>
 			</div>
-			<div>
-				<button onClick={saveCanvas}>Export</button>
-			</div>
-
-			<canvas className="canvas" ref={canvasRef} />
 		</div>
 	);
 }
