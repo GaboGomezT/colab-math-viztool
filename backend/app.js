@@ -27,66 +27,22 @@ io.on("connection", (socket) => {
 
 	socket.on("joinSession", async (boardId) => {
 		socket.join(boardId);
-		// get board data from prisma
-		const boardData = await prisma.board.findUnique({
+	});
+
+	socket.on("canvasClientUpdate", async (pathObject, boardId) => {
+		// Update prisma board and append data to data_history
+		await prisma.board.update({
 			where: {
 				id: boardId,
 			},
-			select: {
-				history: true,
+			data: {
+				history: {
+					push: pathObject,
+				},
 			},
 		});
-		// emit board data to client
-		// console.log(boardData);
-		// get last element of history array
-		const lastElement = boardData.history[boardData.history.length - 1];
-		io.to(boardId).emit("canvasUpdate", lastElement);
-	});
 
-	socket.on("canvasUpdate", async (data, boardId) => {
-		if (boardId) {
-			const boardData = await prisma.board.findUnique({
-				where: {
-					id: boardId,
-				},
-				select: {
-					history: true,
-				},
-			});
-
-			if (boardData.history.length >= 5) {
-				boardData.history.shift();
-				// apply changes to prisma
-				await prisma.board.update({
-					where: {
-						id: boardId,
-					},
-					data: {
-						history: {
-							set: boardData.history,
-						},
-					},
-				});
-			}
-			console.log(boardData.history.length);
-			// Update prisma board and append data to data_history
-			await prisma.board.update({
-				where: {
-					id: boardId,
-				},
-				data: {
-					history: {
-						push: data,
-					},
-				},
-			});
-
-			io.to(boardId).emit("canvasUpdate", data);
-		}
-	});
-
-	socket.on("disconnect", () => {
-		console.log("A user disconnected");
+		io.to(boardId).emit("canvasServerUpdate", pathObject);
 	});
 });
 
