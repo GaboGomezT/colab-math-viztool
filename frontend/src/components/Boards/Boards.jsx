@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import BoardInfo from "./BoardInfo.jsx";
 import CreateBoardModal from "./CreateBoardModal.jsx";
+import { useNavigate } from "react-router-dom";
+
 import "./Boards.modules.css";
 
 export default function Boards() {
@@ -17,6 +19,7 @@ export default function Boards() {
 		isPublic: false,
 	});
 	const [teamOptions, setTeamOptions] = useState([]);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
