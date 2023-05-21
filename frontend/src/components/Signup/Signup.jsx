@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useStat, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "../Login/Login.module.css";
 
@@ -13,6 +13,12 @@ export default function Signup() {
 	});
 	const [errorMessage, setErrorMessage] = useState(false);
 	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (localStorage.getItem("access_token")) {
+			navigate("/tableros");
+		}
+	}, []);
 
 	function handleChange(event) {
 		setFormData((prevFormData) => {
