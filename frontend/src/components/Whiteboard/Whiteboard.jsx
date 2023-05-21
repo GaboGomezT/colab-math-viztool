@@ -19,7 +19,7 @@ export default function Whiteboard() {
 		if (!authToken) {
 			navigate("/");
 		}
-		socket.current = io(`${import.meta.env.VITE_BACKEND_API_URL}:3000`); // Replace with your backend server URL
+		socket.current = io(`${import.meta.env.VITE_BACKEND_API_URL}`); // Replace with your backend server URL
 		socket.current.emit("joinSession", boardId);
 
 		const canvas = new fabric.Canvas(canvasRef.current);
