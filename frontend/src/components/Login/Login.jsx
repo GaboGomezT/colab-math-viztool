@@ -54,7 +54,7 @@ export default function Login() {
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="email">Correo</label>
 				<input
-					className="auth-input"
+					className={classes.authInput}
 					type="email"
 					onChange={handleChange}
 					name="email"
@@ -62,7 +62,7 @@ export default function Login() {
 				/>
 				<label htmlFor="password">Contraseña</label>
 				<input
-					className="auth-input"
+					className={classes.authInput}
 					type="password"
 					onChange={handleChange}
 					name="password"
