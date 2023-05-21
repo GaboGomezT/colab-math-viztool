@@ -33,7 +33,11 @@ authRouter.post("/signup", async (req, res) => {
 
 	// Create and sign the JWT
 	const accessToken = jwt.sign({ id: newUser.id }, secretKey);
-	return res.header("Authorization", accessToken).send({ accessToken });
+	firstName = user.firstName;
+	lastName = user.lastName;
+	return res
+		.header("Authorization", accessToken)
+		.send({ accessToken, firstName, lastName });
 });
 
 authRouter.post("/login", async (req, res) => {
@@ -56,7 +60,11 @@ authRouter.post("/login", async (req, res) => {
 	if (!passwordCompare) {
 		return res.status(400).json({ error: "Invalid Password or Email" });
 	} else {
-		return res.header("Authorization", accessToken).send({ accessToken });
+		firstName = user.firstName;
+		lastName = user.lastName;
+		return res
+			.header("Authorization", accessToken)
+			.send({ accessToken, firstName, lastName });
 	}
 });
 

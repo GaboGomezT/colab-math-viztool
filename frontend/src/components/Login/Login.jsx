@@ -45,6 +45,8 @@ export default function Login() {
 				return response.json();
 			})
 			.then((data) => {
+				localStorage.setItem("first_name", data.firstName);
+				localStorage.setItem("last_name", data.lastName);
 				localStorage.setItem("access_token", data.accessToken);
 				navigate("/tableros");
 			})

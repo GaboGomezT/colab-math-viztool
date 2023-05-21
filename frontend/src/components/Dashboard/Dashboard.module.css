@@ -1,5 +1,19 @@
 header {
 	margin: 0em 1.5em;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+header > span {
+	border-bottom: 0.2em solid black;
+	font-weight: bold;
+}
+
+header > span:hover {
+	cursor: pointer;
+	border-bottom: 0.2em solid #bf50e5;
+	color: #bf50e5;
 }
 
 /* Place the navbar at the bottom of the page, and make it stick */
