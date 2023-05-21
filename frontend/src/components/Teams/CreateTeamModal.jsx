@@ -3,11 +3,10 @@ import React from "react";
 export default function CreateTeamModal({
 	teamData,
 	handleChange,
-	handleCheckboxChange,
 	handleSubmit,
 	closeModal,
 }) {
-	const { name, teamId, isPublic } = teamData;
+	const { name } = teamData;
 	return (
 		<div className="modal-container">
 			<form onSubmit={handleSubmit} className="modal-form">

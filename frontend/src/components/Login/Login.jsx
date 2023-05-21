@@ -53,9 +53,16 @@ export default function Login() {
 			<h1>Iniciar Sesión</h1>
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="email">Correo</label>
-				<input type="email" onChange={handleChange} name="email" id="email" />
+				<input
+					className={classes.authInput}
+					type="email"
+					onChange={handleChange}
+					name="email"
+					id="email"
+				/>
 				<label htmlFor="password">Contraseña</label>
 				<input
+					className={classes.authInput}
 					type="password"
 					onChange={handleChange}
 					name="password"

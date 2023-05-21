@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import TeamInfo from "./TeamInfo.jsx";
 import CreateTeamModal from "./CreateTeamModal.jsx";
+import { useNavigate } from "react-router-dom";
 import "./Teams.modules.css";
 
 export default function Teams() {
@@ -14,6 +15,7 @@ export default function Teams() {
 	const [teamData, setTeamData] = useState({
 		name: "",
 	});
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
@@ -39,7 +41,6 @@ export default function Teams() {
 					return response.json();
 				})
 				.then((data) => {
-					console.log(data);
 					orderTeams(data.teams);
 				})
 				.catch((error) => {

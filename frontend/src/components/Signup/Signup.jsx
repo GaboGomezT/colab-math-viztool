@@ -41,7 +41,6 @@ export default function Signup() {
 			}),
 		})
 			.then((response) => {
-				console.log(response);
 				if (!response.ok) {
 					throw new Error("Network response was not ok");
 				}
@@ -63,6 +62,7 @@ export default function Signup() {
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="email">Correo</label>
 				<input
+					className={classes.authInput}
 					type="email"
 					onChange={handleChange}
 					name="email"
@@ -71,6 +71,7 @@ export default function Signup() {
 				/>
 				<label htmlFor="firstName">Nombre</label>
 				<input
+					className={classes.authInput}
 					type="text"
 					onChange={handleChange}
 					name="firstName"
@@ -79,6 +80,7 @@ export default function Signup() {
 				/>
 				<label htmlFor="lastName">Apellidos</label>
 				<input
+					className={classes.authInput}
 					type="text"
 					onChange={handleChange}
 					name="lastName"
@@ -87,6 +89,7 @@ export default function Signup() {
 				/>
 				<label htmlFor="password">Contraseña</label>
 				<input
+					className={classes.authInput}
 					type="password"
 					onChange={handleChange}
 					name="password"
@@ -95,6 +98,7 @@ export default function Signup() {
 				/>
 				<label htmlFor="passwordConfirmation">Confirma Contraseña</label>
 				<input
+					className={classes.authInput}
 					type="password"
 					onChange={handleChange}
 					name="passwordConfirmation"

@@ -6,6 +6,7 @@ export default function CreateBoardModal({
 	handleCheckboxChange,
 	handleSubmit,
 	closeModal,
+	teamOptions,
 }) {
 	const { name, teamId, isPublic } = boardData;
 	return (
@@ -23,14 +24,26 @@ export default function CreateBoardModal({
 					/>
 				</div>
 				<div>
-					<label htmlFor="teamId">Equipo:</label>
-					<input
+					<label htmlFor="teamId">Equipo: </label>
+					<select
 						id="teamId"
-						name="teamId"
-						type="text"
 						value={teamId}
-						onChange={handleChange}
-					/>
+						onChange={(e) => {
+							handleChange({
+								target: {
+									name: "teamId",
+									value: e.target.value,
+								},
+							});
+						}}
+						className="team-select"
+					>
+						{teamOptions.map((team) => (
+							<option key={team.id} value={team.id}>
+								{team.name}
+							</option>
+						))}
+					</select>
 				</div>
 				<div>
 					<label htmlFor="isPublic">Público:</label>

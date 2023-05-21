@@ -36,7 +36,6 @@ boardRouter.get("/boards", verifyToken, async (req, res) => {
 });
 
 boardRouter.post("/boards", verifyToken, async (req, res) => {
-	console.log(req.body);
 	const { name, teamId, isPublic } = req.body;
 
 	if (!name) {
@@ -62,4 +61,14 @@ boardRouter.post("/boards", verifyToken, async (req, res) => {
 	}
 });
 
+// board detail route
+boardRouter.get("/boards/:boardId", verifyToken, async (req, res) => {
+	const { boardId } = req.params;
+	const board = await prisma.board.findUnique({
+		where: {
+			id: boardId,
+		},
+	});
+	return res.status(200).json(board);
+});
 module.exports = boardRouter;

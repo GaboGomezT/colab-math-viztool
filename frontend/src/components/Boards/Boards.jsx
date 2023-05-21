@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import BoardInfo from "./BoardInfo.jsx";
 import CreateBoardModal from "./CreateBoardModal.jsx";
+import { useNavigate } from "react-router-dom";
+
 import "./Boards.modules.css";
 
 export default function Boards() {
@@ -16,6 +18,8 @@ export default function Boards() {
 		teamId: "",
 		isPublic: false,
 	});
+	const [teamOptions, setTeamOptions] = useState([]);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
@@ -44,7 +48,35 @@ export default function Boards() {
 					orderBoards(data.allBoards);
 				})
 				.catch((error) => {
-					console.error("There was a problem with the fetch operation:", error);
+					console.error(
+						"There was a problem with the fetch operation (getting boards):",
+						error
+					);
+				});
+
+			fetch(`${import.meta.env.VITE_BACKEND_API_URL}/teams`, {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+					"x-access-token": accessToken,
+				},
+			})
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error("Network response was not ok");
+					}
+					return response.json();
+				})
+				.then((data) => {
+					let teams = data.teams;
+					teams.unshift({ id: "", name: "Sin Equipo" });
+					setTeamOptions(teams);
+				})
+				.catch((error) => {
+					console.error(
+						"There was a problem with the fetch operation (getting teams):",
+						error
+					);
 				});
 		}
 	}, [accessToken]);
@@ -115,14 +147,15 @@ export default function Boards() {
 		const formattedCreated = created.toLocaleDateString("es-MX");
 		const modified = new Date(board.modified);
 		const formattedModified = modified.toLocaleDateString("es-MX");
-		// Missing team prop
-		// TODO: Add team prop when implementing team feature
+		const team = teamOptions.find((team) => team.id === board.teamId);
 		return (
 			<BoardInfo
 				key={board.id}
+				id={board.id}
 				name={board.name}
 				createdDate={formattedCreated}
 				modifiedDate={formattedModified}
+				group={team ? team.name : "Sin equipo"}
 			/>
 		);
 	});
@@ -154,6 +187,7 @@ export default function Boards() {
 					handleCheckboxChange={handleCheckboxChange}
 					handleSubmit={handleSubmit}
 					closeModal={() => setShowModal(false)}
+					teamOptions={teamOptions}
 				/>
 			)}
 			<div className="boards">{boardComponents}</div>

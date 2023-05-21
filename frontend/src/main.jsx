@@ -8,6 +8,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Boards from "./components/Boards/Boards";
 import Teams from "./components/Teams/Teams";
 import "./index.css";
+import Whiteboard from "./components/Whiteboard/Whiteboard";
 
 const router = createBrowserRouter([
 	{
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
 				<Teams />
 			</Dashboard>
 		),
+	},
+	{
+		path: "/tableros/:boardId",
+		element: <Whiteboard />,
 	},
 ]);
 
