@@ -68,7 +68,9 @@ export default function Boards() {
 					return response.json();
 				})
 				.then((data) => {
-					setTeamOptions(data.teams);
+					let teams = data.teams;
+					teams.unshift({ id: "", name: "Sin Equipo" });
+					setTeamOptions(teams);
 				})
 				.catch((error) => {
 					console.error(
