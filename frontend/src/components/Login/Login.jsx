@@ -22,7 +22,7 @@ export default function Login() {
 
 	function handleSubmit(event) {
 		event.preventDefault();
-		fetch(`${import.meta.env.VITE_BACKEND_API_URL}:3000/login`, {
+		fetch(`${import.meta.env.VITE_BACKEND_API_URL}/login`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

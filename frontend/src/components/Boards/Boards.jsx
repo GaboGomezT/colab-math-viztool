@@ -31,7 +31,7 @@ export default function Boards() {
 
 	useEffect(() => {
 		if (accessToken) {
-			fetch(`${import.meta.env.VITE_BACKEND_API_URL}:3000/boards`, {
+			fetch(`${import.meta.env.VITE_BACKEND_API_URL}/boards`, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -54,7 +54,7 @@ export default function Boards() {
 					);
 				});
 
-			fetch(`${import.meta.env.VITE_BACKEND_API_URL}:3000/teams`, {
+			fetch(`${import.meta.env.VITE_BACKEND_API_URL}/teams`, {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
@@ -122,7 +122,7 @@ export default function Boards() {
 		e.preventDefault();
 		try {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_API_URL}:3000/boards`,
+				`${import.meta.env.VITE_BACKEND_API_URL}/boards`,
 				{
 					method: "POST",
 					headers: {

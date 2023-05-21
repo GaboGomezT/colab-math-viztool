@@ -41,7 +41,7 @@ export default function Whiteboard() {
 		});
 
 		// Get board data from server
-		fetch(`${import.meta.env.VITE_BACKEND_API_URL}:3000/boards/${boardId}`, {
+		fetch(`${import.meta.env.VITE_BACKEND_API_URL}/boards/${boardId}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
