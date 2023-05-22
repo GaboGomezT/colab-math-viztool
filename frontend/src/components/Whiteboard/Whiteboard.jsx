@@ -13,6 +13,7 @@ export default function Whiteboard() {
 	const [currentBrushSize, setCurrentBrushSize] = useState(5); // Initial brush size: 5
 	const socket = useRef(null);
 	const navigate = useNavigate();
+	const [isErasing, setIsErasing] = useState(false);
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
@@ -82,12 +83,17 @@ export default function Whiteboard() {
 
 	useEffect(() => {
 		if (fabricCanvas) {
-			fabricCanvas.freeDrawingBrush.width = currentBrushSize;
-			fabricCanvas.freeDrawingBrush.color = currentColor;
+			if (isErasing) {
+				fabricCanvas.freeDrawingBrush.width = 50; // You can adjust the size of the eraser here
+				fabricCanvas.freeDrawingBrush.color = "#ffffff"; // The color of the canvas, used for erasing
+			} else {
+				fabricCanvas.freeDrawingBrush.width = currentBrushSize;
+				fabricCanvas.freeDrawingBrush.color = currentColor;
+			}
 
 			setCanvas(fabricCanvas);
 		}
-	}, [currentBrushSize, currentColor]);
+	}, [currentBrushSize, currentColor, isErasing]);
 
 	const handleColorChange = (color) => {
 		setCurrentColor(color);
@@ -129,16 +135,16 @@ export default function Whiteboard() {
 								value={currentColor}
 								onChange={(e) => handleColorChange(e.target.value)}
 							>
-								<option value="#000000">Black</option>
-								<option value="#ff0000">Red</option>
-								<option value="#00ff00">Green</option>
-								<option value="#0000ff">Blue</option>
-								<option value="#ffff00">Yellow</option>
+								<option value="#000000">Negro</option>
+								<option value="#ff0000">Rojo</option>
+								<option value="#00ff00">Verde</option>
+								<option value="#0000ff">Azúl</option>
+								<option value="#ffff00">Amarillo</option>
 								<option value="#ff00ff">Magenta</option>
 							</select>
 						</div>
 						<div>
-							<label>Brush Size:</label>
+							<label>Tamaño:</label>
 
 							<select
 								value={currentBrushSize}
@@ -149,6 +155,16 @@ export default function Whiteboard() {
 								<option value={5}>5px</option>
 								<option value={10}>10px</option>
 							</select>
+						</div>
+						<div>
+							<button
+								onClick={() => {
+									setIsErasing(!isErasing);
+								}}
+								className={isErasing ? "eraser-btn-active" : "eraser-btn"}
+							>
+								Borrar
+							</button>
 						</div>
 					</div>
 				</div>
