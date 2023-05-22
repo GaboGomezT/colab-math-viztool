@@ -169,9 +169,7 @@ export default function Whiteboard() {
 					</div>
 				</div>
 				<canvas className="canvas" ref={canvasRef} />
-				<div className="right-side-bar">
-					<div className="access-management">manage</div>
-				</div>
+				<div className="right-side-bar"></div>
 			</div>
 		</div>
 	);
