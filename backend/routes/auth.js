@@ -33,8 +33,8 @@ authRouter.post("/signup", async (req, res) => {
 
 	// Create and sign the JWT
 	const accessToken = jwt.sign({ id: newUser.id }, secretKey);
-	firstName = user.firstName;
-	lastName = user.lastName;
+	firstName = newUser.firstName;
+	lastName = newUser.lastName;
 	return res
 		.header("Authorization", accessToken)
 		.send({ accessToken, firstName, lastName });
