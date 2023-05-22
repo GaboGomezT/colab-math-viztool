@@ -110,9 +110,7 @@ export default function Whiteboard() {
 			const mostRecentPathObject = objects[objects.length - 1];
 
 			// Emit canvas data to the server with debouncing
-			// debouncedClient(mostRecentPathObject);
 			const serializedPath = mostRecentPathObject.toJSON();
-			// console.log(serializedPath);
 			socket.current.emit("canvasClientUpdate", serializedPath, boardId);
 		}
 	};
