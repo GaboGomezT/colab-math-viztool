@@ -4,6 +4,13 @@ import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import "./Whiteboard.modules.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+	faHome,
+	faEllipsisVertical,
+	faChevronRight,
+	faChevronLeft,
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Whiteboard() {
 	let { boardId } = useParams();
@@ -14,6 +21,7 @@ export default function Whiteboard() {
 	const socket = useRef(null);
 	const navigate = useNavigate();
 	const [isErasing, setIsErasing] = useState(false);
+	const [board, setBoard] = useState(null);
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
@@ -56,6 +64,7 @@ export default function Whiteboard() {
 				return response.json();
 			})
 			.then((board) => {
+				setBoard(board);
 				if (board.history) {
 					board.history.forEach((pathObject) => {
 						const path = new fabric.Path(pathObject.path, pathObject);
@@ -123,7 +132,17 @@ export default function Whiteboard() {
 
 	return (
 		<div className="whiteboard">
-			<div className="canvas-navigation"></div>
+			<div className="canvas-navigation">
+				<div className="left">
+					<FontAwesomeIcon
+						icon={faHome}
+						className="home-icon"
+						onClick={() => navigate("/tableros")}
+					/>
+					<span className="title">{board ? board.name : ""}</span>
+				</div>
+				<FontAwesomeIcon icon={faEllipsisVertical} />
+			</div>
 			<div className="canvas-parent">
 				<div className="left-side-bar">
 					<div className="tool-bar">
@@ -167,6 +186,11 @@ export default function Whiteboard() {
 				</div>
 				<canvas className="canvas" ref={canvasRef} />
 				<div className="right-side-bar"></div>
+			</div>
+			<div className="sheet-navigation">
+				<FontAwesomeIcon icon={faChevronLeft} className="inactive-icon" />
+				<span>1/1</span>
+				<FontAwesomeIcon icon={faChevronRight} />
 			</div>
 		</div>
 	);
