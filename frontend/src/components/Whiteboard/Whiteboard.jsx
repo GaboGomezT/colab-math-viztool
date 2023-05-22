@@ -127,11 +127,11 @@ export default function Whiteboard() {
 			<div className="canvas-parent">
 				<div className="left-side-bar">
 					<div className="tool-bar">
-						<div>
-							<label>Color:</label>
+						<div className="tool">
 							<select
 								value={currentColor}
 								onChange={(e) => handleColorChange(e.target.value)}
+								className="color-select"
 							>
 								<option value="#000000">Negro</option>
 								<option value="#ff0000">Rojo</option>
@@ -141,12 +141,11 @@ export default function Whiteboard() {
 								<option value="#ff00ff">Magenta</option>
 							</select>
 						</div>
-						<div>
-							<label>Tamaño:</label>
-
+						<div className="tool">
 							<select
 								value={currentBrushSize}
 								onChange={(e) => handleBrushSizeChange(Number(e.target.value))}
+								className="size-select"
 							>
 								<option value={1}>1px</option>
 								<option value={3}>3px</option>
@@ -154,7 +153,7 @@ export default function Whiteboard() {
 								<option value={10}>10px</option>
 							</select>
 						</div>
-						<div>
+						<div className="tool">
 							<button
 								onClick={() => {
 									setIsErasing(!isErasing);

@@ -22,3 +22,26 @@
 	cursor: pointer;
 	outline: inherit;
 }
+
+.canvas-parent {
+	display: flex;
+	justify-content: center;
+}
+
+.left-side-bar {
+	position: absolute;
+	left: 0;
+	top: 20%;
+	border: 1px solid black;
+	z-index: 1;
+	background-color: white;
+}
+
+.tool {
+	margin: 1rem 0.5rem;
+}
+
+.color-select,
+.size-select {
+	font-size: 15px;
+}
