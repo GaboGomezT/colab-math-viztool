@@ -5,10 +5,12 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import BoardInfo from "./BoardInfo.jsx";
 import CreateBoardModal from "./CreateBoardModal.jsx";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import "./Boards.modules.css";
 
 export default function Boards() {
+	const { teamId } = useParams();
 	const [selectedValue, setSelectedValue] = useState("last-modified");
 	const [accessToken, setAccessToken] = useState(null);
 	const [usersBoards, setUsersBoards] = useState([]);
@@ -27,59 +29,62 @@ export default function Boards() {
 			navigate("/");
 		}
 		setAccessToken(authToken);
-	}, []);
-
-	useEffect(() => {
-		if (accessToken) {
-			fetch(`${import.meta.env.VITE_BACKEND_API_URL}/boards`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					"x-access-token": accessToken,
-				},
+		fetch(`${import.meta.env.VITE_BACKEND_API_URL}/boards`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"x-access-token": authToken,
+			},
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				return response.json();
 			})
-				.then((response) => {
-					if (!response.ok) {
-						throw new Error("Network response was not ok");
-					}
-					return response.json();
-				})
-				.then((data) => {
+			.then((data) => {
+				if (typeof teamId !== "undefined") {
+					let filteredBoards = data.allBoards.filter(
+						(board) => board.teamId === teamId
+					);
+					orderBoards(filteredBoards);
+				} else {
+					console.log("getting all boards");
 					orderBoards(data.allBoards);
-				})
-				.catch((error) => {
-					console.error(
-						"There was a problem with the fetch operation (getting boards):",
-						error
-					);
-				});
-
-			fetch(`${import.meta.env.VITE_BACKEND_API_URL}/teams`, {
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					"x-access-token": accessToken,
-				},
+				}
 			})
-				.then((response) => {
-					if (!response.ok) {
-						throw new Error("Network response was not ok");
-					}
-					return response.json();
-				})
-				.then((data) => {
-					let teams = data.teams;
-					teams.unshift({ id: "", name: "Sin Equipo" });
-					setTeamOptions(teams);
-				})
-				.catch((error) => {
-					console.error(
-						"There was a problem with the fetch operation (getting teams):",
-						error
-					);
-				});
-		}
-	}, [accessToken]);
+			.catch((error) => {
+				console.error(
+					"There was a problem with the fetch operation (getting boards):",
+					error
+				);
+			});
+
+		fetch(`${import.meta.env.VITE_BACKEND_API_URL}/teams`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				"x-access-token": authToken,
+			},
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				return response.json();
+			})
+			.then((data) => {
+				let teams = data.teams;
+				teams.unshift({ id: "", name: "Sin Equipo" });
+				setTeamOptions(teams);
+			})
+			.catch((error) => {
+				console.error(
+					"There was a problem with the fetch operation (getting teams):",
+					error
+				);
+			});
+	}, []);
 
 	useEffect(() => {
 		setBoardData({

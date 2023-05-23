@@ -29,7 +29,9 @@ export default function Dashboard(props) {
 			{props.children}
 			<div className={classes.navbar}>
 				<div>
-					<NavLink to="/tableros">
+					{/* This links to root because that assured a re-render of the boards page */}
+					{/* This is a hack for the issue when getting boards of a team */}
+					<NavLink to="/">
 						<FontAwesomeIcon icon={faChalkboard} className={classes.icon} />
 						Tableros
 					</NavLink>

@@ -39,6 +39,14 @@ const router = createBrowserRouter([
 		path: "/tableros/:boardId",
 		element: <Whiteboard />,
 	},
+	{
+		path: "/equipos/:teamId",
+		element: (
+			<Dashboard>
+				<Boards />
+			</Dashboard>
+		),
+	},
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

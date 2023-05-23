@@ -104,7 +104,12 @@ export default function Teams() {
 		const created = new Date(team.created);
 		const formattedCreated = created.toLocaleDateString("es-MX");
 		return (
-			<TeamInfo key={team.id} name={team.name} createdDate={formattedCreated} />
+			<TeamInfo
+				key={team.id}
+				id={team.id}
+				name={team.name}
+				createdDate={formattedCreated}
+			/>
 		);
 	});
 	return (
