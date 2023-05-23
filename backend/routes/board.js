@@ -48,6 +48,10 @@ boardRouter.post("/boards", verifyToken, async (req, res) => {
 			owner: { connect: { id: req.user.id } },
 			isPublic: isPublic || false,
 			...(teamId ? { team: { connect: { id: teamId } } } : {}),
+			// Create a single sheet for the new board
+			sheets: {
+				create: [{ history: [] }],
+			},
 		};
 
 		const newBoard = await prisma.board.create({
@@ -68,7 +72,33 @@ boardRouter.get("/boards/:boardId", verifyToken, async (req, res) => {
 		where: {
 			id: boardId,
 		},
+		include: {
+			sheets: true,
+		},
 	});
 	return res.status(200).json(board);
 });
+
+// route to create new sheet
+boardRouter.post("/boards/:boardId/sheets", verifyToken, async (req, res) => {
+	const { boardId } = req.params;
+
+	try {
+		const newSheet = await prisma.sheet.create({
+			data: {
+				board: {
+					connect: {
+						id: boardId,
+					},
+				},
+				history: [],
+			},
+		});
+		res.status(201).json(newSheet);
+	} catch (error) {
+		console.error("Error creating sheet:", error);
+		res.status(500).json({ error: "Error creating sheet." });
+	}
+});
+
 module.exports = boardRouter;

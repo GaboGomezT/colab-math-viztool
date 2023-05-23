@@ -22,6 +22,10 @@ export default function Whiteboard() {
 	const navigate = useNavigate();
 	const [isErasing, setIsErasing] = useState(false);
 	const [board, setBoard] = useState(null);
+	const [sheets, setSheets] = useState({});
+	const [currentSheet, setCurrentSheet] = useState(null);
+	const sheetsRef = useRef(sheets);
+	const [isActive, setIsActive] = useState(false);
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
@@ -43,12 +47,6 @@ export default function Whiteboard() {
 		canvas.freeDrawingBrush.width = currentBrushSize;
 		canvas.freeDrawingBrush.color = currentColor;
 
-		// Handle canvas updates from server
-		socket.current.on("canvasServerUpdate", (pathObject) => {
-			let path = new fabric.Path(pathObject.path, pathObject);
-			canvas.add(path);
-		});
-
 		// Get board data from server
 		fetch(`${import.meta.env.VITE_BACKEND_API_URL}/boards/${boardId}`, {
 			method: "GET",
@@ -65,12 +63,23 @@ export default function Whiteboard() {
 			})
 			.then((board) => {
 				setBoard(board);
-				if (board.history) {
-					board.history.forEach((pathObject) => {
+				const firstSheet = board.sheets[0];
+				setCurrentSheet(firstSheet.id);
+				if (firstSheet.history) {
+					firstSheet.history.forEach((pathObject) => {
 						const path = new fabric.Path(pathObject.path, pathObject);
 						canvas.add(path);
 					});
 				}
+
+				board.sheets.forEach((sheet) => {
+					setSheets((prevSheets) => {
+						return {
+							...prevSheets,
+							[sheet.id]: { ...sheet, index: board.sheets.indexOf(sheet) },
+						};
+					});
+				});
 			})
 			.catch((error) => {
 				console.error(
@@ -79,7 +88,6 @@ export default function Whiteboard() {
 					error
 				);
 			});
-
 		setCanvas(canvas);
 
 		return () => {
@@ -89,6 +97,31 @@ export default function Whiteboard() {
 			socket.current.disconnect();
 		};
 	}, []);
+
+	useEffect(() => {
+		sheetsRef.current = sheets;
+	}, [sheets]);
+
+	useEffect(() => {
+		if (Object.keys(sheetsRef.current).length !== 0) {
+			// Handle canvas updates from server
+			socket.current.on("canvasServerUpdate", (pathObject, sheetId) => {
+				const updatedSheet = sheetsRef.current[sheetId];
+				updatedSheet.history.push(pathObject);
+				setSheets((prevSheets) => {
+					return {
+						...prevSheets,
+						[sheetId]: updatedSheet,
+					};
+				});
+				if (sheetId === currentSheet) {
+					const path = new fabric.Path(pathObject.path, pathObject);
+					fabricCanvas.add(path);
+					setCanvas(fabricCanvas);
+				}
+			});
+		}
+	}, [currentSheet]);
 
 	useEffect(() => {
 		if (fabricCanvas) {
@@ -118,17 +151,127 @@ export default function Whiteboard() {
 			const objects = fabricCanvas.getObjects();
 			const mostRecentPathObject = objects[objects.length - 1];
 
-			// Emit canvas data to the server with debouncing
+			// Emit canvas data to the server
 			const serializedPath = mostRecentPathObject.toJSON();
-			socket.current.emit("canvasClientUpdate", serializedPath, boardId);
+			socket.current.emit(
+				"canvasClientUpdate",
+				serializedPath,
+				boardId,
+				currentSheet
+			);
 		}
 	};
 
 	useEffect(() => {
-		if (fabricCanvas) {
+		if (fabricCanvas && currentSheet) {
+			fabricCanvas.off("path:created");
 			fabricCanvas.on("path:created", saveCanvas);
 		}
-	}, [fabricCanvas]);
+	}, [fabricCanvas, currentSheet]);
+
+	const createSheet = async () => {
+		const authToken = localStorage.getItem("access_token");
+		if (!authToken) {
+			navigate("/");
+			return; // Return early if authToken is not present
+		}
+
+		try {
+			const response = await fetch(
+				`${import.meta.env.VITE_BACKEND_API_URL}/boards/${boardId}/sheets`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"x-access-token": authToken,
+					},
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("Network response was not ok");
+			}
+
+			const sheet = await response.json();
+			return sheet;
+			// You can perform additional operations here if needed
+		} catch (error) {
+			console.error(
+				"There was a problem with the fetch operation (creating sheet):",
+				boardId,
+				error
+			);
+		}
+	};
+
+	const handleForward = async () => {
+		const currentSheetIndex = sheets[currentSheet].index;
+
+		// If I'm on the last sheet, create a new one
+		let nextSheet;
+		if (currentSheetIndex + 1 === Object.keys(sheets).length) {
+			try {
+				nextSheet = await createSheet();
+				setSheets((prevSheets) => {
+					return {
+						...prevSheets,
+						[nextSheet.id]: { ...nextSheet, index: currentSheetIndex + 1 },
+					};
+				});
+			} catch (error) {
+				console.error("Error creating sheet:", error);
+				return; // Return early if an error occurred during sheet creation
+			}
+		} else {
+			nextSheet = Object.values(sheets).find(
+				(sheet) => sheet.index === currentSheetIndex + 1
+			);
+		}
+
+		setCurrentSheet(nextSheet.id);
+		// remove all paths from canvas
+		fabricCanvas.forEachObject((object) => {
+			if (object.type === "path") {
+				fabricCanvas.remove(object);
+			}
+		});
+
+		if (nextSheet.history) {
+			nextSheet.history.forEach((pathObject) => {
+				const path = new fabric.Path(pathObject.path, pathObject);
+				fabricCanvas.add(path);
+			});
+		}
+		setCanvas(fabricCanvas);
+		setIsActive(true);
+	};
+
+	const handleBackward = () => {
+		const currentSheetIndex = sheets[currentSheet].index;
+		if (currentSheetIndex === 0) {
+			return;
+		}
+		const previousSheet = Object.values(sheets).find(
+			(sheet) => sheet.index === currentSheetIndex - 1
+		);
+		setCurrentSheet(previousSheet.id);
+		// remove all paths from canvas
+		fabricCanvas.forEachObject((object) => {
+			if (object.type === "path") {
+				fabricCanvas.remove(object);
+			}
+		});
+		if (previousSheet.history) {
+			previousSheet.history.forEach((pathObject) => {
+				const path = new fabric.Path(pathObject.path, pathObject);
+				fabricCanvas.add(path);
+			});
+		}
+		setCanvas(fabricCanvas);
+		if (previousSheet.index === 0) {
+			setIsActive(false);
+		}
+	};
 
 	return (
 		<div className="whiteboard">
@@ -188,9 +331,16 @@ export default function Whiteboard() {
 				<div className="right-side-bar"></div>
 			</div>
 			<div className="sheet-navigation">
-				<FontAwesomeIcon icon={faChevronLeft} className="inactive-icon" />
-				<span>1/1</span>
-				<FontAwesomeIcon icon={faChevronRight} />
+				<FontAwesomeIcon
+					icon={faChevronLeft}
+					className={isActive ? "" : "inactive-icon"}
+					onClick={handleBackward}
+				/>
+				<span>
+					{sheets[currentSheet] ? sheets[currentSheet].index + 1 : ""}/
+					{Object.keys(sheets).length}
+				</span>
+				<FontAwesomeIcon icon={faChevronRight} onClick={handleForward} />
 			</div>
 		</div>
 	);

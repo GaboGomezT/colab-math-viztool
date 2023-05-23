@@ -29,11 +29,11 @@ io.on("connection", (socket) => {
 		socket.join(boardId);
 	});
 
-	socket.on("canvasClientUpdate", async (pathObject, boardId) => {
+	socket.on("canvasClientUpdate", async (pathObject, boardId, sheetId) => {
 		// Update prisma board and append data to data_history
-		await prisma.board.update({
+		await prisma.sheet.update({
 			where: {
-				id: boardId,
+				id: sheetId,
 			},
 			data: {
 				history: {
@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
 			},
 		});
 
-		io.to(boardId).emit("canvasServerUpdate", pathObject);
+		io.to(boardId).emit("canvasServerUpdate", pathObject, sheetId);
 	});
 });
 

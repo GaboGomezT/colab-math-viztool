@@ -12,7 +12,6 @@ export default function Dashboard(props) {
 
 	useEffect(() => {
 		const firstName = localStorage.getItem("first_name");
-		console.log(firstName);
 		const lastName = localStorage.getItem("last_name");
 		setName(`${firstName} ${lastName}`);
 	}, []);
