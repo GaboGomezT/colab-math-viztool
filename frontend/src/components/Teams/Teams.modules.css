@@ -117,3 +117,7 @@
 .modal-form button {
 	margin-bottom: 1em;
 }
+
+.large-form {
+	width: 800px;
+}

@@ -18,12 +18,11 @@ teamRouter.get("/teams", verifyToken, async (req, res) => {
 			},
 		},
 	});
-	const teams = [
-		...user.ownedTeams,
-		...user.memberOfTeams.map((membership) => membership.team),
-	];
 
-	res.status(200).json({ teams });
+	const ownedTeams = user.ownedTeams;
+	const memberTeams = user.memberOfTeams.map((membership) => membership.team);
+
+	res.status(200).json({ ownedTeams, memberTeams });
 });
 
 teamRouter.post("/teams", verifyToken, async (req, res) => {
@@ -49,6 +48,42 @@ teamRouter.post("/teams", verifyToken, async (req, res) => {
 	} catch (error) {
 		console.error("Error creating team:", error);
 		return res.status(500).json({ error: "Error creating team." });
+	}
+});
+
+// get team details
+teamRouter.get("/teams/:teamId", verifyToken, async (req, res) => {
+	const { teamId } = req.params;
+	try {
+		const team = await prisma.team.findUnique({
+			where: {
+				id: teamId,
+			},
+		});
+		return res.status(200).json(team);
+	} catch (error) {
+		console.error("Error getting team:", error);
+		return res.status(500).json({ error: "Error getting team." });
+	}
+});
+
+// patch team details
+teamRouter.patch("/teams/:teamId", verifyToken, async (req, res) => {
+	const { teamId } = req.params;
+	const { isOpen } = req.body;
+	try {
+		const updatedTeam = await prisma.team.update({
+			where: {
+				id: teamId,
+			},
+			data: {
+				isOpen,
+			},
+		});
+		return res.status(200).json(updatedTeam);
+	} catch (error) {
+		console.error("Error updating team:", error);
+		return res.status(500).json({ error: "Error updating team." });
 	}
 });
 

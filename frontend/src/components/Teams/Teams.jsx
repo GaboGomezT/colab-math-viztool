@@ -6,6 +6,7 @@ import TeamInfo from "./TeamInfo.jsx";
 import CreateTeamModal from "./CreateTeamModal.jsx";
 import { useNavigate } from "react-router-dom";
 import "./Teams.modules.css";
+import TeamInviteModal from "./TeamInviteModal.jsx";
 
 export default function Teams() {
 	const [selectedValue, setSelectedValue] = useState("last-created");
@@ -16,6 +17,8 @@ export default function Teams() {
 		name: "",
 	});
 	const navigate = useNavigate();
+	const [showInviteModal, setShowInviteModal] = useState(false);
+	const [teamId, setTeamId] = useState(null);
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
@@ -41,7 +44,8 @@ export default function Teams() {
 					return response.json();
 				})
 				.then((data) => {
-					orderTeams(data.teams);
+					const teams = [...data.ownedTeams, ...data.memberTeams];
+					orderTeams(teams);
 				})
 				.catch((error) => {
 					console.error("There was a problem with the fetch operation:", error);
@@ -100,6 +104,11 @@ export default function Teams() {
 		}
 	};
 
+	const handleInviteClick = (teamId) => {
+		setShowInviteModal(true);
+		setTeamId(teamId);
+	};
+
 	const teamComponents = usersTeams.map((team) => {
 		const created = new Date(team.created);
 		const formattedCreated = created.toLocaleDateString("es-MX");
@@ -109,9 +118,11 @@ export default function Teams() {
 				id={team.id}
 				name={team.name}
 				createdDate={formattedCreated}
+				handleInviteClick={handleInviteClick}
 			/>
 		);
 	});
+
 	return (
 		<div className="board-view">
 			<span className="view-title">Tus Equipos</span>
@@ -138,6 +149,12 @@ export default function Teams() {
 					handleChange={handleChange}
 					handleSubmit={handleSubmit}
 					closeModal={() => setShowModal(false)}
+				/>
+			)}
+			{showInviteModal && (
+				<TeamInviteModal
+					teamId={teamId}
+					closeModal={() => setShowInviteModal(false)}
 				/>
 			)}
 			<div className="teams">{teamComponents}</div>

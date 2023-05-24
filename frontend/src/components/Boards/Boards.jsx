@@ -49,7 +49,6 @@ export default function Boards() {
 					);
 					orderBoards(filteredBoards);
 				} else {
-					console.log("getting all boards");
 					orderBoards(data.allBoards);
 				}
 			})
@@ -74,7 +73,7 @@ export default function Boards() {
 				return response.json();
 			})
 			.then((data) => {
-				let teams = data.teams;
+				let teams = data.ownedTeams;
 				teams.unshift({ id: "", name: "Sin Equipo" });
 				setTeamOptions(teams);
 			})
