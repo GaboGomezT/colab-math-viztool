@@ -21,6 +21,7 @@ export default function Boards() {
 		isPublic: false,
 	});
 	const [teamOptions, setTeamOptions] = useState([]);
+	const [allTeams, setAllTeams] = useState([]);
 	const [teamName, setTeamName] = useState("");
 	const navigate = useNavigate();
 
@@ -78,9 +79,12 @@ export default function Boards() {
 				teams.unshift({ id: "", name: "Sin Equipo" });
 				setTeamOptions(teams);
 
+				const allTeams = [...data.ownedTeams, ...data.memberTeams];
+				setAllTeams(allTeams);
+
+				// If this is the boards page for a specific team, get the name of the team
+				// and set it in the state so it can be displayed in the page
 				if (typeof teamId !== "undefined") {
-					// get name of team
-					const allTeams = [...data.ownedTeams, ...data.memberTeams];
 					const team = allTeams.find((team) => team.id === teamId);
 					setTeamName(team.name);
 				}
@@ -159,7 +163,7 @@ export default function Boards() {
 		const formattedCreated = created.toLocaleDateString("es-MX");
 		const modified = new Date(board.modified);
 		const formattedModified = modified.toLocaleDateString("es-MX");
-		const team = teamOptions.find((team) => team.id === board.teamId);
+		const team = allTeams.find((team) => team.id === board.teamId);
 		return (
 			<BoardInfo
 				key={board.id}
