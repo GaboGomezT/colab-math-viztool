@@ -18,7 +18,6 @@ export default function Boards() {
 	const [boardData, setBoardData] = useState({
 		name: "",
 		teamId: "",
-		isPublic: false,
 	});
 	const [teamOptions, setTeamOptions] = useState([]);
 	const [allTeams, setAllTeams] = useState([]);
@@ -101,7 +100,6 @@ export default function Boards() {
 		setBoardData({
 			name: "",
 			teamId: "",
-			isPublic: false,
 		});
 	}, [showModal]);
 

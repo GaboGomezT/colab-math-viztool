@@ -36,7 +36,7 @@ boardRouter.get("/boards", verifyToken, async (req, res) => {
 });
 
 boardRouter.post("/boards", verifyToken, async (req, res) => {
-	const { name, teamId, isPublic } = req.body;
+	const { name, teamId } = req.body;
 
 	if (!name) {
 		return res.status(400).json({ error: "Missing required fields: name" });
@@ -46,7 +46,6 @@ boardRouter.post("/boards", verifyToken, async (req, res) => {
 		const boardData = {
 			name,
 			owner: { connect: { id: req.user.id } },
-			isPublic: isPublic || false,
 			...(teamId ? { team: { connect: { id: teamId } } } : {}),
 			// Create a single sheet for the new board
 			sheets: {

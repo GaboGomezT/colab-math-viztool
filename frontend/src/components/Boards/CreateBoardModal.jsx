@@ -8,7 +8,7 @@ export default function CreateBoardModal({
 	closeModal,
 	teamOptions,
 }) {
-	const { name, teamId, isPublic } = boardData;
+	const { name, teamId } = boardData;
 	return (
 		<div className="modal-container">
 			<form onSubmit={handleSubmit} className="modal-form">
@@ -44,16 +44,6 @@ export default function CreateBoardModal({
 							</option>
 						))}
 					</select>
-				</div>
-				<div>
-					<label htmlFor="isPublic">Público:</label>
-					<input
-						id="isPublic"
-						name="isPublic"
-						type="checkbox"
-						checked={isPublic}
-						onChange={handleCheckboxChange}
-					/>
 				</div>
 				<button type="submit">Crear</button>
 				<button type="button" onClick={closeModal}>
