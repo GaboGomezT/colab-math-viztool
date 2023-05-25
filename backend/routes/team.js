@@ -87,4 +87,70 @@ teamRouter.patch("/teams/:teamId", verifyToken, async (req, res) => {
 	}
 });
 
+// Add user to team
+teamRouter.post("/teams/:teamId/add-user", verifyToken, async (req, res) => {
+	const { teamId } = req.params;
+
+	try {
+		// Find the team by ID
+		const team = await prisma.team.findUnique({
+			where: {
+				id: teamId,
+			},
+			include: {
+				members: true,
+			},
+		});
+
+		// Check if the team exists
+		if (!team) {
+			return res.status(404).json({ error: "Team not found." });
+		}
+
+		// Check if the authenticated user is the owner of the team
+		if (team.ownerId === req.user.id) {
+			return res
+				.status(400)
+				.json({ error: "Team owner can't be added as member of team" });
+		}
+
+		const userId = req.user.id;
+
+		// Find the user by ID
+		const user = await prisma.user.findUnique({
+			where: {
+				id: userId,
+			},
+		});
+
+		// Check if the user exists
+		if (!user) {
+			return res.status(404).json({ error: "User not found." });
+		}
+
+		// Check if the user is already a member of the team
+		const isMember = team.members.some((member) => member.userId === user.id);
+		if (isMember) {
+			return res
+				.status(400)
+				.json({ error: "User is already a member of the team." });
+		}
+
+		// Add the user to the team
+		await prisma.user_Team.create({
+			data: {
+				userId: user.id,
+				teamId: team.id,
+			},
+		});
+
+		return res
+			.status(200)
+			.json({ message: "User added to the team successfully." });
+	} catch (error) {
+		console.error("Error adding user to team:", error);
+		return res.status(500).json({ error: "Error adding user to team." });
+	}
+});
+
 module.exports = teamRouter;

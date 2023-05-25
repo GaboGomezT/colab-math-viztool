@@ -21,6 +21,7 @@ export default function Boards() {
 		isPublic: false,
 	});
 	const [teamOptions, setTeamOptions] = useState([]);
+	const [teamName, setTeamName] = useState("");
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -76,6 +77,13 @@ export default function Boards() {
 				let teams = data.ownedTeams;
 				teams.unshift({ id: "", name: "Sin Equipo" });
 				setTeamOptions(teams);
+
+				if (typeof teamId !== "undefined") {
+					// get name of team
+					const allTeams = [...data.ownedTeams, ...data.memberTeams];
+					const team = allTeams.find((team) => team.id === teamId);
+					setTeamName(team.name);
+				}
 			})
 			.catch((error) => {
 				console.error(
@@ -165,7 +173,9 @@ export default function Boards() {
 	});
 	return (
 		<div className="board-view">
-			<span className="view-title">Tus Tableros</span>
+			<span className="view-title">
+				{teamName ? `Tableros de ${teamName}` : "Tableros"}
+			</span>
 			<div className="options">
 				<button className="new-board-btn" onClick={() => setShowModal(true)}>
 					<FontAwesomeIcon icon={faPlus} className="board-btn-icon" />

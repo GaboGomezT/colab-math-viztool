@@ -7,6 +7,7 @@ import CreateTeamModal from "./CreateTeamModal.jsx";
 import { useNavigate } from "react-router-dom";
 import "./Teams.modules.css";
 import TeamInviteModal from "./TeamInviteModal.jsx";
+import jwt_decode from "jwt-decode";
 
 export default function Teams() {
 	const [selectedValue, setSelectedValue] = useState("last-created");
@@ -19,12 +20,15 @@ export default function Teams() {
 	const navigate = useNavigate();
 	const [showInviteModal, setShowInviteModal] = useState(false);
 	const [teamId, setTeamId] = useState(null);
+	const [userId, setUserId] = useState(null);
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
 		if (!authToken) {
 			navigate("/");
 		}
+		const decodedToken = jwt_decode(authToken);
+		setUserId(decodedToken.id);
 		setAccessToken(authToken);
 	}, []);
 
@@ -119,13 +123,14 @@ export default function Teams() {
 				name={team.name}
 				createdDate={formattedCreated}
 				handleInviteClick={handleInviteClick}
+				isOwner={team.userId === userId}
 			/>
 		);
 	});
 
 	return (
 		<div className="board-view">
-			<span className="view-title">Tus Equipos</span>
+			<span className="view-title">Equipos</span>
 			<div className="options">
 				<button className="new-board-btn" onClick={() => setShowModal(true)}>
 					<FontAwesomeIcon icon={faPlus} className="board-btn-icon" />

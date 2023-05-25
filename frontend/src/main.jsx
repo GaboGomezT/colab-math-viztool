@@ -9,6 +9,7 @@ import Boards from "./components/Boards/Boards";
 import Teams from "./components/Teams/Teams";
 import "./index.css";
 import Whiteboard from "./components/Whiteboard/Whiteboard";
+import Invitation from "./components/Invitacion/Invitation";
 
 const router = createBrowserRouter([
 	{
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
 				<Boards />
 			</Dashboard>
 		),
+	},
+	{
+		path: "/equipos/:teamId/invitacion",
+		element: <Invitation />,
 	},
 ]);
 
