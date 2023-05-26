@@ -67,15 +67,42 @@ boardRouter.post("/boards", verifyToken, async (req, res) => {
 // board detail route
 boardRouter.get("/boards/:boardId", verifyToken, async (req, res) => {
 	const { boardId } = req.params;
-	const board = await prisma.board.findUnique({
-		where: {
-			id: boardId,
-		},
-		include: {
-			sheets: true,
-		},
-	});
-	return res.status(200).json(board);
+	try {
+		const board = await prisma.board.findUnique({
+			where: {
+				id: boardId,
+			},
+			include: {
+				sheets: true,
+				team: {
+					include: {
+						members: {
+							select: {
+								member: true,
+							},
+						},
+					},
+				},
+				permissions: true,
+			},
+		});
+
+		// Here you can map through the team members to only return the user information
+		if (board.team) {
+			board.team.members = board.team.members.map((user_team) => {
+				return {
+					id: user_team.member.id,
+					firstName: user_team.member.firstName,
+					lastName: user_team.member.lastName,
+				};
+			});
+		}
+
+		return res.status(200).json(board);
+	} catch (error) {
+		console.error("Error retrieving board:", error);
+		return res.status(500).json({ error: "Error retrieving board." });
+	}
 });
 
 // route to create new sheet

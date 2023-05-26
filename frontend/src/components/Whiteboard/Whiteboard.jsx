@@ -7,10 +7,10 @@ import "./Whiteboard.modules.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faHome,
-	faEllipsisVertical,
 	faChevronRight,
 	faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
+import jwt_decode from "jwt-decode";
 
 export default function Whiteboard() {
 	let { boardId } = useParams();
@@ -26,14 +26,28 @@ export default function Whiteboard() {
 	const [currentSheet, setCurrentSheet] = useState(null);
 	const sheetsRef = useRef(sheets);
 	const [isActive, setIsActive] = useState(false);
+	const [teamMembers, setTeamMembers] = useState([]);
+	const [showPeopleModal, setShowPeopleModal] = useState(false);
+	const [isOwner, setIsOwner] = useState(false);
+	const [permissions, setPermissions] = useState({});
+	const [canEdit, setCanEdit] = useState(false);
 
 	useEffect(() => {
 		const authToken = localStorage.getItem("access_token");
 		if (!authToken) {
 			navigate("/");
 		}
+		const decodedToken = jwt_decode(authToken);
 		socket.current = io(`${import.meta.env.VITE_BACKEND_API_URL}`); // Replace with your backend server URL
 		socket.current.emit("joinSession", boardId);
+
+		// Listen to permissions updates from server
+		socket.current.on("permissionsServerUpdate", (userId, access) => {
+			if (userId === decodedToken.id) {
+				setCanEdit(access === "WRITE" ? true : false);
+				canvas.isDrawingMode = access === "WRITE" ? true : false;
+			}
+		});
 
 		const canvas = new fabric.Canvas(canvasRef.current);
 
@@ -80,6 +94,52 @@ export default function Whiteboard() {
 						};
 					});
 				});
+
+				const members = board.team ? board.team.members : [];
+
+				// Validate if the owner of the board is the current user or if the current user is a member of the team
+				if (
+					!(
+						decodedToken.id === board.userId ||
+						userIsMember(decodedToken.id, members)
+					)
+				) {
+					navigate("/");
+				}
+
+				const initialPermissions = board.permissions;
+
+				if (decodedToken.id === board.userId) {
+					setIsOwner(true);
+					setCanEdit(true);
+					setTeamMembers(members);
+					members.forEach((member) => {
+						setPermissions((prevPermissions) => {
+							// check if the member has a permission object
+							const permission = initialPermissions.find((permission) => {
+								return permission.userId === member.id;
+							});
+
+							return {
+								...prevPermissions,
+								[member.id]: permission ? permission.access : "READ",
+							};
+						});
+					});
+				} else {
+					// If the user is a member of the team, get the permissions from the board object
+					// find the user's permission object
+					const permission = initialPermissions.find((permission) => {
+						return permission.userId === decodedToken.id;
+					});
+					// if the user has a permission object, set the canEdit state
+					if (permission) {
+						setCanEdit(permission.access === "WRITE" ? true : false);
+					} else {
+						// if the user doesn't have a permission object, set the canEdit state to false
+						setCanEdit(false);
+					}
+				}
 			})
 			.catch((error) => {
 				console.error(
@@ -97,6 +157,16 @@ export default function Whiteboard() {
 			socket.current.disconnect();
 		};
 	}, []);
+
+	const userIsMember = (userId, members) => {
+		let isMember = false;
+		members.forEach((member) => {
+			if (member.id === userId) {
+				isMember = true;
+			}
+		});
+		return isMember;
+	};
 
 	useEffect(() => {
 		sheetsRef.current = sheets;
@@ -210,6 +280,9 @@ export default function Whiteboard() {
 		// If I'm on the last sheet, create a new one
 		let nextSheet;
 		if (currentSheetIndex + 1 === Object.keys(sheets).length) {
+			if (!canEdit) {
+				return; // Return early if the user doesn't have write access
+			}
 			try {
 				nextSheet = await createSheet();
 				setSheets((prevSheets) => {
@@ -273,6 +346,21 @@ export default function Whiteboard() {
 		}
 	};
 
+	const handlePermissionChange = (memberId, checked) => {
+		setPermissions((prevPermissions) => {
+			return {
+				...prevPermissions,
+				[memberId]: checked ? "WRITE" : "READ",
+			};
+		});
+		socket.current.emit(
+			"permissionsClientUpdate",
+			memberId,
+			boardId,
+			checked ? "WRITE" : "READ"
+		);
+	};
+
 	return (
 		<div className="whiteboard">
 			<div className="canvas-navigation">
@@ -284,7 +372,6 @@ export default function Whiteboard() {
 					/>
 					<span className="title">{board ? board.name : ""}</span>
 				</div>
-				<FontAwesomeIcon icon={faEllipsisVertical} />
 			</div>
 			<div className="canvas-parent">
 				<div className="left-side-bar">
@@ -328,7 +415,48 @@ export default function Whiteboard() {
 					</div>
 				</div>
 				<canvas className="canvas" ref={canvasRef} />
-				<div className="right-side-bar"></div>
+				{isOwner && (
+					<div>
+						<div
+							className={
+								showPeopleModal
+									? "member-btn-wrapper-active"
+									: "member-btn-wrapper"
+							}
+						>
+							<button
+								onClick={() => {
+									setShowPeopleModal(!showPeopleModal);
+								}}
+								className={showPeopleModal ? "member-btn-active" : "member-btn"}
+							>
+								Miembros
+							</button>
+						</div>
+						{showPeopleModal && (
+							<div className="member-list">
+								<h2>Permisos</h2>
+
+								{teamMembers.map((member) => {
+									return (
+										<div key={member.id} className="member">
+											<input
+												type="checkbox"
+												checked={
+													permissions[member.id] === "WRITE" ? true : false
+												}
+												onChange={(e) =>
+													handlePermissionChange(member.id, e.target.checked)
+												}
+											/>
+											{`${member.firstName} ${member.lastName}`}
+										</div>
+									);
+								})}
+							</div>
+						)}
+					</div>
+				)}
 			</div>
 			<div className="sheet-navigation">
 				<FontAwesomeIcon

@@ -23,10 +23,9 @@ const io = socketIO(server, {
 });
 
 io.on("connection", (socket) => {
-	console.log("A user connected");
-
 	socket.on("joinSession", async (boardId) => {
 		socket.join(boardId);
+		console.log("A user connected to board ", boardId);
 	});
 
 	socket.on("canvasClientUpdate", async (pathObject, boardId, sheetId) => {
@@ -44,6 +43,51 @@ io.on("connection", (socket) => {
 
 		io.to(boardId).emit("canvasServerUpdate", pathObject, sheetId);
 	});
+
+	// recieve permission change from client
+	socket.on(
+		"permissionsClientUpdate",
+		async (userId, boardId, newPermission) => {
+			// First, find the permission record
+			const permission = await prisma.permission.findFirst({
+				where: {
+					userId: userId,
+					boardId: boardId,
+				},
+			});
+
+			if (!permission) {
+				// create a new permission record
+				await prisma.permission.create({
+					data: {
+						access: newPermission,
+						user: {
+							connect: {
+								id: userId,
+							},
+						},
+						board: {
+							connect: {
+								id: boardId,
+							},
+						},
+					},
+				});
+			} else {
+				// Then, update the permission
+				await prisma.permission.update({
+					where: {
+						id: permission.id,
+					},
+					data: {
+						access: newPermission,
+					},
+				});
+			}
+
+			io.to(boardId).emit("permissionsServerUpdate", userId, newPermission);
+		}
+	);
 });
 
 const PORT = process.env.PORT || 3000;

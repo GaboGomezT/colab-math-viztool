@@ -24,6 +24,7 @@
 	font: inherit;
 	cursor: pointer;
 	outline: inherit;
+	background-color: white;
 }
 
 .eraser-btn-active {
@@ -58,6 +59,66 @@
 .color-select,
 .size-select {
 	font-size: 15px;
+}
+
+.member-btn-wrapper {
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+}
+
+.member-btn-wrapper-active {
+	position: absolute;
+	right: 350px;
+	top: 0;
+	z-index: 1;
+}
+.member-btn {
+	/* overwrite default button styles */
+	background: none;
+	border: black 1px solid;
+	border-radius: 0.5em;
+	padding: 0.1rem 0.5rem;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+	background-color: white;
+}
+
+.member-btn-active {
+	background: #bf50e5;
+	color: white;
+	border: black 1px solid;
+	border-radius: 0.5em;
+	padding: 0.1rem 0.5rem;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+.member-list {
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	background-color: white;
+	width: 350px;
+	border: black 1px solid;
+	padding: 1rem;
+}
+
+.member-list h2 {
+	margin: 0.5rem 0;
+	text-align: center;
+}
+
+.member {
+	margin: 0.5rem 0;
+}
+
+.member input {
+	margin-right: 1rem;
 }
 
 .sheet-navigation {
