@@ -6,7 +6,7 @@ import TeamInfo from "./TeamInfo.jsx";
 import CreateTeamModal from "./CreateTeamModal.jsx";
 import { useNavigate } from "react-router-dom";
 import "./Teams.modules.css";
-import TeamConfigModal from "./TeamInviteModal.jsx";
+import TeamConfigModal from "./TeamConfigModal.jsx";
 import jwt_decode from "jwt-decode";
 
 export default function Teams() {
