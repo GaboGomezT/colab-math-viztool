@@ -98,6 +98,33 @@ export default function TeamConfigModal({
 			});
 	};
 
+	const handleDelete = (e) => {
+		e.preventDefault();
+		fetch(`${import.meta.env.VITE_BACKEND_API_URL}/teams/${teamId}`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+				"x-access-token": accessToken,
+			},
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				return response.json();
+			})
+			.then(() => {
+				setUsersTeams((prevState) => {
+					const newState = prevState.filter((team) => team.id !== teamId);
+					return newState;
+				});
+				closeModal();
+			})
+			.catch((error) => {
+				console.error("There was a problem with the fetch operation:", error);
+			});
+	};
+
 	return (
 		<div className="modal-container">
 			<div className="modal-form large-form">
@@ -126,9 +153,14 @@ export default function TeamConfigModal({
 					/>
 					<button onClick={nameSubmit}>Cambiar</button>
 				</div>
-				<button type="button" onClick={closeModal}>
-					Cerrar
-				</button>
+				<div className="modal-buttons">
+					<button type="button" onClick={closeModal}>
+						Cerrar
+					</button>
+					<button className="delete-btn" onClick={handleDelete}>
+						Eliminar
+					</button>
+				</div>
 			</div>
 		</div>
 	);
