@@ -18,7 +18,7 @@ export default function Teams() {
 		name: "",
 	});
 	const navigate = useNavigate();
-	const [showInviteModal, setShowInviteModal] = useState(false);
+	const [showTeamConfigModal, setShowTeamConfigModal] = useState(false);
 	const [teamId, setTeamId] = useState(null);
 	const [userId, setUserId] = useState(null);
 
@@ -109,7 +109,7 @@ export default function Teams() {
 	};
 
 	const handleConfigClick = (teamId) => {
-		setShowInviteModal(true);
+		setShowTeamConfigModal(true);
 		setTeamId(teamId);
 	};
 
@@ -156,12 +156,12 @@ export default function Teams() {
 					closeModal={() => setShowModal(false)}
 				/>
 			)}
-			{showInviteModal && (
+			{showTeamConfigModal && (
 				<TeamConfigModal
 					teamId={teamId}
 					teamName={usersTeams.find((team) => team.id === teamId).name}
 					setUsersTeams={setUsersTeams}
-					closeModal={() => setShowInviteModal(false)}
+					closeModal={() => setShowTeamConfigModal(false)}
 				/>
 			)}
 			<div className="teams">{teamComponents}</div>
