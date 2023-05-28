@@ -108,7 +108,7 @@ export default function Teams() {
 		}
 	};
 
-	const handleInviteClick = (teamId) => {
+	const handleConfigClick = (teamId) => {
 		setShowInviteModal(true);
 		setTeamId(teamId);
 	};
@@ -122,7 +122,7 @@ export default function Teams() {
 				id={team.id}
 				name={team.name}
 				createdDate={formattedCreated}
-				handleInviteClick={handleInviteClick}
+				handleConfigClick={handleConfigClick}
 				isOwner={team.userId === userId}
 			/>
 		);
