@@ -106,7 +106,7 @@ export default function Boards() {
 	useEffect(() => {
 		setBoardData({
 			name: "",
-			teamId: "",
+			teamId: teamId,
 		});
 	}, [showModal]);
 
