@@ -135,9 +135,12 @@ export default function Whiteboard() {
 					// if the user has a permission object, set the canEdit state
 					if (permission) {
 						setCanEdit(permission.access === "WRITE" ? true : false);
+						// Enable free drawing mode
+						canvas.isDrawingMode = permission.access === "WRITE" ? true : false;
 					} else {
 						// if the user doesn't have a permission object, set the canEdit state to false
 						setCanEdit(false);
+						canvas.isDrawingMode = false;
 					}
 				}
 			})
