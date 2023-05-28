@@ -50,3 +50,27 @@ header > span:hover {
 	background-color: #04aa6d;
 	color: white;
 }
+
+/* on medium and large displays place navbar on left */
+@media (min-width: 768px) {
+	main {
+		display: flex;
+	}
+	.navbar {
+		position: relative;
+		flex-direction: column;
+		align-items: center;
+		width: 200px;
+		border-right: #848484 0.3em solid;
+	}
+
+	.rightDashboard {
+		width: 100%;
+	}
+	.navbar a {
+		font-size: 1.5rem;
+	}
+	.navbar svg {
+		font-size: 3rem;
+	}
+}
