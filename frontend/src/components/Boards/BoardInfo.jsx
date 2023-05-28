@@ -7,6 +7,8 @@ export default function BoardInfo({
 	id,
 	group,
 	name,
+	handleConfigClick,
+	isOwner,
 	createdDate,
 	modifiedDate,
 }) {
@@ -21,7 +23,13 @@ export default function BoardInfo({
 					</span>
 				</div>
 			</Link>
-			<FontAwesomeIcon icon={faEllipsisVertical} className="info-icon" />
+			{isOwner && (
+				<FontAwesomeIcon
+					icon={faEllipsisVertical}
+					onClick={() => handleConfigClick(id)}
+					className="info-icon"
+				/>
+			)}
 		</div>
 	);
 }
