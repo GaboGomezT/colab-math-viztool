@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-export default function TeamInviteModal({ teamId, closeModal }) {
+export default function TeamConfigModal({
+	teamId,
+	teamName,
+	setUsersTeams,
+	closeModal,
+}) {
 	const location = useLocation();
 	const [isOpen, setIsOpen] = useState(false);
 	const [accessToken, setAccessToken] = useState(null);
+	const [name, setName] = useState(teamName);
 	const url = `${window.location.origin}${location.pathname}/${teamId}/invitacion`;
 
 	const handleCheckboxChange = (e) => {
@@ -17,7 +23,7 @@ export default function TeamInviteModal({ teamId, closeModal }) {
 				"Content-Type": "application/json",
 				"x-access-token": accessToken,
 			},
-			body: JSON.stringify({ isOpen: checked }),
+			body: JSON.stringify({ isOpen: checked, name: name }),
 		})
 			.then((response) => {
 				if (!response.ok) {
@@ -55,13 +61,52 @@ export default function TeamInviteModal({ teamId, closeModal }) {
 			});
 	}, []);
 
+	const handleInputChange = (e) => {
+		const { value } = e.target;
+		setName(value);
+	};
+
+	const nameSubmit = (e) => {
+		e.preventDefault();
+		fetch(`${import.meta.env.VITE_BACKEND_API_URL}/teams/${teamId}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+				"x-access-token": accessToken,
+			},
+			body: JSON.stringify({ name, isOpen }),
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				return response.json();
+			})
+			.then(() => {
+				setUsersTeams((prevState) => {
+					const newState = prevState.map((team) => {
+						if (team.id === teamId) {
+							return { ...team, name };
+						}
+						return team;
+					});
+					return newState;
+				});
+			})
+			.catch((error) => {
+				console.error("There was a problem with the fetch operation:", error);
+			});
+	};
+
 	return (
 		<div className="modal-container">
 			<div className="modal-form large-form">
-				<h2>Invitación</h2>
-				<span>{url}</span>
 				<div>
-					<label htmlFor="isOpen">activa:</label>
+					Enlace de invitación:
+					<p>{url}</p>
+				</div>
+				<div>
+					<label htmlFor="isOpen">Estado de invitación:</label>
 					<input
 						id="isOpen"
 						name="isOpen"
@@ -69,6 +114,17 @@ export default function TeamInviteModal({ teamId, closeModal }) {
 						checked={isOpen}
 						onChange={handleCheckboxChange}
 					/>
+				</div>
+				<div>
+					<label htmlFor="name">Nombre: </label>
+					<input
+						id="name"
+						name="name"
+						type="text"
+						value={name}
+						onChange={handleInputChange}
+					/>
+					<button onClick={nameSubmit}>Cambiar</button>
 				</div>
 				<button type="button" onClick={closeModal}>
 					Cerrar

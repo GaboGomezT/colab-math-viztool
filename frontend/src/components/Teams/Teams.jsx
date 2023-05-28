@@ -6,7 +6,7 @@ import TeamInfo from "./TeamInfo.jsx";
 import CreateTeamModal from "./CreateTeamModal.jsx";
 import { useNavigate } from "react-router-dom";
 import "./Teams.modules.css";
-import TeamInviteModal from "./TeamInviteModal.jsx";
+import TeamConfigModal from "./TeamInviteModal.jsx";
 import jwt_decode from "jwt-decode";
 
 export default function Teams() {
@@ -157,8 +157,10 @@ export default function Teams() {
 				/>
 			)}
 			{showInviteModal && (
-				<TeamInviteModal
+				<TeamConfigModal
 					teamId={teamId}
+					teamName={usersTeams.find((team) => team.id === teamId).name}
+					setUsersTeams={setUsersTeams}
 					closeModal={() => setShowInviteModal(false)}
 				/>
 			)}

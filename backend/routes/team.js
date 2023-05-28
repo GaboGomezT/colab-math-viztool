@@ -70,7 +70,7 @@ teamRouter.get("/teams/:teamId", verifyToken, async (req, res) => {
 // patch team details
 teamRouter.patch("/teams/:teamId", verifyToken, async (req, res) => {
 	const { teamId } = req.params;
-	const { isOpen } = req.body;
+	const { isOpen, name } = req.body;
 	try {
 		const updatedTeam = await prisma.team.update({
 			where: {
@@ -78,6 +78,7 @@ teamRouter.patch("/teams/:teamId", verifyToken, async (req, res) => {
 			},
 			data: {
 				isOpen,
+				name,
 			},
 		});
 		return res.status(200).json(updatedTeam);
