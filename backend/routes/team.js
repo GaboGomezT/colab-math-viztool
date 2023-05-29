@@ -174,9 +174,15 @@ teamRouter.delete("/teams/:teamId", verifyToken, async (req, res) => {
 				sheets: true,
 			},
 		});
-		// delete all sheets for the boards of this team
+		// delete all sheets and permissions for the boards of this team
 		for (const board of boards) {
 			await prisma.sheet.deleteMany({
+				where: {
+					boardId: board.id,
+				},
+			});
+
+			await prisma.permission.deleteMany({
 				where: {
 					boardId: board.id,
 				},

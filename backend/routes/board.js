@@ -160,6 +160,13 @@ boardRouter.delete("/boards/:boardId", verifyToken, async (req, res) => {
 			},
 		});
 
+		// delete all permissions associated with board
+		await prisma.permission.deleteMany({
+			where: {
+				boardId: boardId,
+			},
+		});
+
 		const deletedBoard = await prisma.board.delete({
 			where: {
 				id: boardId,
