@@ -6,7 +6,7 @@ import TeamInfo from "./TeamInfo.jsx";
 import CreateTeamModal from "./CreateTeamModal.jsx";
 import { useNavigate } from "react-router-dom";
 import "./Teams.modules.css";
-import TeamInviteModal from "./TeamInviteModal.jsx";
+import TeamConfigModal from "./TeamConfigModal.jsx";
 import jwt_decode from "jwt-decode";
 
 export default function Teams() {
@@ -18,7 +18,7 @@ export default function Teams() {
 		name: "",
 	});
 	const navigate = useNavigate();
-	const [showInviteModal, setShowInviteModal] = useState(false);
+	const [showTeamConfigModal, setShowTeamConfigModal] = useState(false);
 	const [teamId, setTeamId] = useState(null);
 	const [userId, setUserId] = useState(null);
 
@@ -108,8 +108,8 @@ export default function Teams() {
 		}
 	};
 
-	const handleInviteClick = (teamId) => {
-		setShowInviteModal(true);
+	const handleConfigClick = (teamId) => {
+		setShowTeamConfigModal(true);
 		setTeamId(teamId);
 	};
 
@@ -122,7 +122,7 @@ export default function Teams() {
 				id={team.id}
 				name={team.name}
 				createdDate={formattedCreated}
-				handleInviteClick={handleInviteClick}
+				handleConfigClick={handleConfigClick}
 				isOwner={team.userId === userId}
 			/>
 		);
@@ -156,10 +156,12 @@ export default function Teams() {
 					closeModal={() => setShowModal(false)}
 				/>
 			)}
-			{showInviteModal && (
-				<TeamInviteModal
+			{showTeamConfigModal && (
+				<TeamConfigModal
 					teamId={teamId}
-					closeModal={() => setShowInviteModal(false)}
+					teamName={usersTeams.find((team) => team.id === teamId).name}
+					setUsersTeams={setUsersTeams}
+					closeModal={() => setShowTeamConfigModal(false)}
 				/>
 			)}
 			<div className="teams">{teamComponents}</div>

@@ -7,7 +7,7 @@ export default function TeamInfo({
 	id,
 	name,
 	createdDate,
-	handleInviteClick,
+	handleConfigClick,
 	isOwner,
 }) {
 	return (
@@ -22,7 +22,7 @@ export default function TeamInfo({
 				<FontAwesomeIcon
 					icon={faEllipsisVertical}
 					className="info-icon"
-					onClick={() => handleInviteClick(id)}
+					onClick={() => handleConfigClick(id)}
 				/>
 			)}
 		</div>

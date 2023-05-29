@@ -70,7 +70,7 @@ teamRouter.get("/teams/:teamId", verifyToken, async (req, res) => {
 // patch team details
 teamRouter.patch("/teams/:teamId", verifyToken, async (req, res) => {
 	const { teamId } = req.params;
-	const { isOpen } = req.body;
+	const { isOpen, name } = req.body;
 	try {
 		const updatedTeam = await prisma.team.update({
 			where: {
@@ -78,6 +78,7 @@ teamRouter.patch("/teams/:teamId", verifyToken, async (req, res) => {
 			},
 			data: {
 				isOpen,
+				name,
 			},
 		});
 		return res.status(200).json(updatedTeam);
@@ -150,6 +151,60 @@ teamRouter.post("/teams/:teamId/add-user", verifyToken, async (req, res) => {
 	} catch (error) {
 		console.error("Error adding user to team:", error);
 		return res.status(500).json({ error: "Error adding user to team." });
+	}
+});
+
+// delete team endpoint
+teamRouter.delete("/teams/:teamId", verifyToken, async (req, res) => {
+	const { teamId } = req.params;
+	try {
+		// delete all user_team entries for this team
+		await prisma.user_Team.deleteMany({
+			where: {
+				teamId: teamId,
+			},
+		});
+
+		// get all boards of this team
+		const boards = await prisma.board.findMany({
+			where: {
+				teamId: teamId,
+			},
+			include: {
+				sheets: true,
+			},
+		});
+		// delete all sheets and permissions for the boards of this team
+		for (const board of boards) {
+			await prisma.sheet.deleteMany({
+				where: {
+					boardId: board.id,
+				},
+			});
+
+			await prisma.permission.deleteMany({
+				where: {
+					boardId: board.id,
+				},
+			});
+		}
+
+		// delete all board entries for this team
+		await prisma.board.deleteMany({
+			where: {
+				teamId: teamId,
+			},
+		});
+		const deletedTeam = await prisma.team.delete({
+			where: {
+				id: teamId,
+			},
+		});
+
+		return res.status(200).json(deletedTeam);
+	} catch (error) {
+		console.error("Error deleting team:", error);
+		return res.status(500).json({ error: "Error deleting team." });
 	}
 });
 

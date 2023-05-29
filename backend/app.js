@@ -41,6 +41,16 @@ io.on("connection", (socket) => {
 			},
 		});
 
+		// update board modified field to current time
+		await prisma.board.update({
+			where: {
+				id: boardId,
+			},
+			data: {
+				modified: new Date(),
+			},
+		});
+
 		io.to(boardId).emit("canvasServerUpdate", pathObject, sheetId);
 	});
 

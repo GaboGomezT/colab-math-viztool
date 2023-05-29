@@ -3,7 +3,6 @@ import React from "react";
 export default function CreateBoardModal({
 	boardData,
 	handleChange,
-	handleCheckboxChange,
 	handleSubmit,
 	closeModal,
 	teamOptions,

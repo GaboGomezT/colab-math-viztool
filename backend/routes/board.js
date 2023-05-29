@@ -127,4 +127,56 @@ boardRouter.post("/boards/:boardId/sheets", verifyToken, async (req, res) => {
 	}
 });
 
+// patch route to update board name
+boardRouter.patch("/boards/:boardId", verifyToken, async (req, res) => {
+	const { boardId } = req.params;
+	const { name } = req.body;
+
+	try {
+		const updatedBoard = await prisma.board.update({
+			where: {
+				id: boardId,
+			},
+			data: {
+				name,
+			},
+		});
+		res.status(200).json(updatedBoard);
+	} catch (error) {
+		console.error("Error updating board:", error);
+		res.status(500).json({ error: "Error updating board." });
+	}
+});
+
+// delete route to delete board
+boardRouter.delete("/boards/:boardId", verifyToken, async (req, res) => {
+	const { boardId } = req.params;
+
+	try {
+		// delete all sheets associated with board
+		await prisma.sheet.deleteMany({
+			where: {
+				boardId: boardId,
+			},
+		});
+
+		// delete all permissions associated with board
+		await prisma.permission.deleteMany({
+			where: {
+				boardId: boardId,
+			},
+		});
+
+		const deletedBoard = await prisma.board.delete({
+			where: {
+				id: boardId,
+			},
+		});
+		res.status(200).json(deletedBoard);
+	} catch (error) {
+		console.error("Error deleting board:", error);
+		res.status(500).json({ error: "Error deleting board." });
+	}
+});
+
 module.exports = boardRouter;

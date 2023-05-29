@@ -6,8 +6,10 @@ import BoardInfo from "./BoardInfo.jsx";
 import CreateBoardModal from "./CreateBoardModal.jsx";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-
+import BoardConfigModal from "./BoardConfigModal.jsx";
 import "./Boards.modules.css";
+
+import jwt_decode from "jwt-decode";
 
 export default function Boards() {
 	const { teamId } = useParams();
@@ -22,6 +24,9 @@ export default function Boards() {
 	const [teamOptions, setTeamOptions] = useState([]);
 	const [allTeams, setAllTeams] = useState([]);
 	const [teamName, setTeamName] = useState("");
+	const [showBoardConfigModal, setShowBoardConfigModal] = useState(false);
+	const [boardId, setBoardId] = useState(null);
+	const [userId, setUserId] = useState(null);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -30,6 +35,8 @@ export default function Boards() {
 			navigate("/");
 		}
 		setAccessToken(authToken);
+		const decodedToken = jwt_decode(authToken);
+		setUserId(decodedToken.id);
 		fetch(`${import.meta.env.VITE_BACKEND_API_URL}/boards`, {
 			method: "GET",
 			headers: {
@@ -99,7 +106,7 @@ export default function Boards() {
 	useEffect(() => {
 		setBoardData({
 			name: "",
-			teamId: "",
+			teamId: teamId,
 		});
 	}, [showModal]);
 
@@ -156,6 +163,11 @@ export default function Boards() {
 		}
 	};
 
+	const handleConfigClick = (boardId) => {
+		setShowBoardConfigModal(true);
+		setBoardId(boardId);
+	};
+
 	const boardComponents = usersBoards.map((board) => {
 		const created = new Date(board.created);
 		const formattedCreated = created.toLocaleDateString("es-MX");
@@ -166,10 +178,12 @@ export default function Boards() {
 			<BoardInfo
 				key={board.id}
 				id={board.id}
+				group={team ? team.name : "Sin equipo"}
 				name={board.name}
+				handleConfigClick={handleConfigClick}
+				isOwner={board.userId === userId}
 				createdDate={formattedCreated}
 				modifiedDate={formattedModified}
-				group={team ? team.name : "Sin equipo"}
 			/>
 		);
 	});
@@ -204,6 +218,14 @@ export default function Boards() {
 					handleSubmit={handleSubmit}
 					closeModal={() => setShowModal(false)}
 					teamOptions={teamOptions}
+				/>
+			)}
+			{showBoardConfigModal && (
+				<BoardConfigModal
+					boardId={boardId}
+					boardName={usersBoards.find((board) => board.id === boardId).name}
+					setUsersBoards={setUsersBoards}
+					closeModal={() => setShowBoardConfigModal(false)}
 				/>
 			)}
 			<div className="boards">{boardComponents}</div>

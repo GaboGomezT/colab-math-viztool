@@ -22,11 +22,6 @@ export default function Dashboard(props) {
 	};
 	return (
 		<main>
-			<header>
-				<h2>¡Hola, {name}!</h2>
-				<span onClick={deleteToken}>Cerrar Sesión</span>
-			</header>
-			{props.children}
 			<div className={classes.navbar}>
 				<div>
 					{/* This links to root because that assured a re-render of the boards page */}
@@ -42,6 +37,13 @@ export default function Dashboard(props) {
 						Equipos
 					</NavLink>
 				</div>
+			</div>
+			<div className={classes.rightDashboard}>
+				<header>
+					<h2>¡Hola, {name}!</h2>
+					<span onClick={deleteToken}>Cerrar Sesión</span>
+				</header>
+				{props.children}
 			</div>
 		</main>
 	);
