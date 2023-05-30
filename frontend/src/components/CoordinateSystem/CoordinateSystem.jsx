@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import * as THREE from "three";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
-
+import "./CoordinateSystem.modules.css";
 export default function CoordinateSystem() {
 	useEffect(() => {
 		const environment = new SceneInit("myThreeJsCanvas");
@@ -155,5 +155,10 @@ export default function CoordinateSystem() {
 		);
 	}, []);
 
-	return <canvas id="myThreeJsCanvas" />;
+	return (
+		<div id="coord-container">
+			<div id="drag-bar"></div>
+			<canvas id="myThreeJsCanvas" />
+		</div>
+	);
 }

@@ -1,0 +1,14 @@
+#coord-container {
+	position: absolute;
+}
+
+#drag-bar {
+	position: relative;
+	height: 30px;
+	background-color: #333;
+}
+
+#myThreeJsCanvas {
+	position: relative;
+	border: 1px solid black;
+}

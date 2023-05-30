@@ -11,6 +11,7 @@ import {
 	faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import jwt_decode from "jwt-decode";
+import CoordinateSystem from "../CoordinateSystem/CoordinateSystem";
 
 export default function Whiteboard() {
 	let { boardId } = useParams();
@@ -418,6 +419,7 @@ export default function Whiteboard() {
 					</div>
 				</div>
 				<canvas className="canvas" ref={canvasRef} />
+				<CoordinateSystem />
 				{isOwner && (
 					<div>
 						<div

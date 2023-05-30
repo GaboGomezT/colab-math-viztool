@@ -40,14 +40,17 @@ export default class SceneInit {
 
 		// NOTE: Specify a canvas which is already created in the HTML.
 		const canvas = document.getElementById(this.canvasId);
+		const canvasContainer = document.getElementById("coord-container");
+		const dragBar = document.getElementById("drag-bar");
+
 		this.renderer = new THREE.WebGLRenderer({
 			canvas,
 			// NOTE: Anti-aliasing smooths out the edges.
 			antialias: true,
 		});
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
-		// this.renderer.shadowMap.enabled = true;
-		document.body.appendChild(this.renderer.domElement);
+
+		this.renderer.setSize(400, 300);
+		canvasContainer.appendChild(this.renderer.domElement);
 
 		this.clock = new THREE.Clock();
 		this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -63,8 +66,51 @@ export default class SceneInit {
 		this.directionalLight.position.set(0, 32, 64);
 		this.scene.add(this.directionalLight);
 
+		// Make the scene draggable
+		dragBar.addEventListener("mousedown", startDrag);
+		dragBar.addEventListener("touchstart", startDrag);
+
+		function startDrag(e) {
+			e.preventDefault();
+			let offsetX, offsetY;
+			if (e.type === "touchstart") {
+				offsetX = e.touches[0].clientX - canvasContainer.offsetLeft;
+				offsetY = e.touches[0].clientY - canvasContainer.offsetTop;
+			} else {
+				// 'mousedown'
+				offsetX = e.clientX - canvasContainer.offsetLeft;
+				offsetY = e.clientY - canvasContainer.offsetTop;
+			}
+
+			function mouseMoveHandler(e) {
+				let clientX, clientY;
+				if (e.type === "touchmove") {
+					clientX = e.touches[0].clientX;
+					clientY = e.touches[0].clientY;
+				} else {
+					// 'mousemove'
+					clientX = e.clientX;
+					clientY = e.clientY;
+				}
+				canvasContainer.style.top = clientY - offsetY + "px";
+				canvasContainer.style.left = clientX - offsetX + "px";
+			}
+
+			function reset() {
+				document.removeEventListener("mousemove", mouseMoveHandler);
+				document.removeEventListener("mouseup", reset);
+				document.removeEventListener("touchmove", mouseMoveHandler);
+				document.removeEventListener("touchend", reset);
+			}
+
+			document.addEventListener("mousemove", mouseMoveHandler);
+			document.addEventListener("mouseup", reset);
+			document.addEventListener("touchmove", mouseMoveHandler);
+			document.addEventListener("touchend", reset);
+		}
+
 		// if window resizes
-		window.addEventListener("resize", () => this.onWindowResize(), false);
+		// window.addEventListener("resize", () => this.onWindowResize(), false);
 	}
 
 	animate() {
