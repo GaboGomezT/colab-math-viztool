@@ -181,6 +181,41 @@ export default function VectorCompAng({ args }) {
 		components.push(xzFlatLine);
 		components.push(heightLine);
 
+		const factor = 0.3;
+
+		const pointAX = new THREE.Vector3(rx * factor, 0, 0);
+		// create new vector with the direction of xComponent and half the magnitude
+		const halfXComponent = new THREE.Vector3(rx, 0, 0)
+			.normalize()
+			.multiplyScalar(rx * 0.5);
+
+		// create vector that is resultVector plus halfXComponent
+		const tempVector = resultVector.add(halfXComponent);
+		const controlPoint = new THREE.Vector3(
+			tempVector.x * factor,
+			tempVector.y * factor,
+			tempVector.z * factor
+		);
+		const pointB = new THREE.Vector3(rx * factor, ry * factor, rz * factor);
+
+		// Create a curve path
+		const curve = new THREE.QuadraticBezierCurve3(
+			pointAX,
+			controlPoint,
+			pointB
+		);
+
+		// Define the curve geometry
+		const curveGeometry = new THREE.BufferGeometry().setFromPoints(
+			curve.getPoints(50)
+		);
+
+		// Define the curve material
+		const curveMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+
+		// Create the curve mesh
+		const curveMesh = new THREE.Line(curveGeometry, curveMaterial);
+		components.push(curveMesh);
 		// Add the components to the sceneComponents array
 		setSceneComponents(components);
 	}, []);
