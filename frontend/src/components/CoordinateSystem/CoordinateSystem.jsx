@@ -159,6 +159,7 @@ export default function CoordinateSystem() {
 		<div id="coord-container">
 			<div id="drag-bar"></div>
 			<canvas id="myThreeJsCanvas" />
+			<div id="resize-handle"></div>
 		</div>
 	);
 }
