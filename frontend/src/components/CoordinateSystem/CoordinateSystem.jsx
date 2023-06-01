@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import SceneInit from "./SceneInit";
 import { useEffect } from "react";
 import * as THREE from "three";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import "./CoordinateSystem.modules.css";
-export default function CoordinateSystem() {
+
+export default function CoordinateSystem({ sceneComponents }) {
+	const [renderedEnvironment, setRenderedEnvironment] = useState(null);
+
 	useEffect(() => {
 		const environment = new SceneInit("myThreeJsCanvas");
 		environment.initialize();
@@ -127,10 +130,11 @@ export default function CoordinateSystem() {
 				environment.scene.add(z_cone);
 
 				// Adding number labels
-				for (var i = -10; i <= 10; i++) {
+				const new_magnitus = 10;
+				for (var i = -new_magnitus; i <= new_magnitus; i++) {
 					var label = new TextGeometry(i.toString(), {
 						font: font,
-						size: 0.2,
+						size: 0.3,
 						height: 0,
 					});
 
@@ -151,9 +155,18 @@ export default function CoordinateSystem() {
 					environment.billboardText.push(z_label);
 					environment.scene.add(z_label);
 				}
+				setRenderedEnvironment(environment);
 			}
 		);
 	}, []);
+
+	useEffect(() => {
+		if (renderedEnvironment) {
+			sceneComponents.forEach((component) => {
+				renderedEnvironment.scene.add(component);
+			});
+		}
+	}, [renderedEnvironment]);
 
 	return (
 		<div id="coord-container">

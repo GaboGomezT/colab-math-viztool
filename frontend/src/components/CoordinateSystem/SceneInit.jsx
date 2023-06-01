@@ -50,7 +50,7 @@ export default class SceneInit {
 			antialias: true,
 		});
 
-		this.renderer.setSize(400, 400);
+		this.renderer.setSize(700, 500);
 		canvasContainer.appendChild(this.renderer.domElement);
 
 		this.clock = new THREE.Clock();
