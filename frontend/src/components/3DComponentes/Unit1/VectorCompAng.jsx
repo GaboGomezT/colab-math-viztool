@@ -7,8 +7,7 @@ export default function VectorCompAng({ args }) {
 	const [sceneComponents, setSceneComponents] = useState([]);
 
 	function radianesAGrados(radianes) {
-		var grados = radianes * (180 / Math.PI);
-		return grados;
+		return radianes * (180 / Math.PI);
 	}
 
 	useEffect(() => {
@@ -58,22 +57,37 @@ export default function VectorCompAng({ args }) {
 		console.log("cos**2(α) + cos**2(β) + cos**2(ɣ) =", respuesta);
 
 		// Create a vector
-		var origin = new THREE.Vector3(0, 0, 0);
-		var direction = new THREE.Vector3(rx, ry, rz).normalize();
-		var length = magnitud;
-		var color = 0x000000;
-		var arrowHelper = new THREE.ArrowHelper(direction, origin, length, color);
+		const origin = new THREE.Vector3(0, 0, 0);
+		const direction = new THREE.Vector3(rx, ry, rz).normalize();
+		const length = magnitud;
+		const color = 0x000000;
+		const arrowHelper = new THREE.ArrowHelper(direction, origin, length, color);
 
 		// Add the arrowHelper to the components array
 		components.push(arrowHelper);
 
-		var xComponent = new THREE.Vector3(rx, 0, 0);
-		var yComponent = new THREE.Vector3(0, ry, 0);
-		var zComponent = new THREE.Vector3(0, 0, rz);
+		const xComponent = new THREE.Vector3(rx, 0, 0);
+		const yComponent = new THREE.Vector3(0, ry, 0);
+		const zComponent = new THREE.Vector3(0, 0, rz);
 
-		var xComponentArrow = new THREE.ArrowHelper(xComponent, origin, rx, color);
-		var yComponentArrow = new THREE.ArrowHelper(yComponent, origin, ry, color);
-		var zComponentArrow = new THREE.ArrowHelper(zComponent, origin, rz, color);
+		const xComponentArrow = new THREE.ArrowHelper(
+			xComponent,
+			origin,
+			rx,
+			color
+		);
+		const yComponentArrow = new THREE.ArrowHelper(
+			yComponent,
+			origin,
+			ry,
+			color
+		);
+		const zComponentArrow = new THREE.ArrowHelper(
+			zComponent,
+			origin,
+			rz,
+			color
+		);
 
 		// Add the arrows to the components array
 		components.push(xComponentArrow);
