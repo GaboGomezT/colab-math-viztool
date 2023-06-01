@@ -12,3 +12,14 @@
 	position: relative;
 	border: 1px solid black;
 }
+
+#resize-handle {
+	width: 20px;
+	height: 20px;
+	background: #333;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	cursor: nwse-resize;
+	z-index: 10;
+}

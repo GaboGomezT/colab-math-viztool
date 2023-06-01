@@ -42,6 +42,7 @@ export default class SceneInit {
 		const canvas = document.getElementById(this.canvasId);
 		const canvasContainer = document.getElementById("coord-container");
 		const dragBar = document.getElementById("drag-bar");
+		const resizeHandle = document.getElementById("resize-handle");
 
 		this.renderer = new THREE.WebGLRenderer({
 			canvas,
@@ -109,8 +110,54 @@ export default class SceneInit {
 			document.addEventListener("touchend", reset);
 		}
 
-		// if window resizes
-		// window.addEventListener("resize", () => this.onWindowResize(), false);
+		const startResize = (e) => {
+			e.preventDefault();
+			let initialWidth = canvasContainer.offsetWidth;
+			let initialHeight = canvasContainer.offsetHeight;
+			let initialMouseX, initialMouseY;
+			if (e.type === "touchstart") {
+				initialMouseX = e.touches[0].clientX;
+				initialMouseY = e.touches[0].clientY;
+			} else {
+				// 'mousedown'
+				initialMouseX = e.clientX;
+				initialMouseY = e.clientY;
+			}
+
+			const mouseMoveHandler = (e) => {
+				let clientX, clientY;
+				if (e.type === "touchmove") {
+					clientX = e.touches[0].clientX;
+					clientY = e.touches[0].clientY;
+				} else {
+					// 'mousemove'
+					clientX = e.clientX;
+					clientY = e.clientY;
+				}
+				let newWidth = initialWidth + (clientX - initialMouseX);
+				let newHeight = initialHeight + (clientY - initialMouseY);
+				canvasContainer.style.width = newWidth + "px";
+				canvasContainer.style.height = newHeight + "px";
+				// Resize the renderer and update camera aspect ratio
+				this.renderer.setSize(newWidth, newHeight);
+				this.camera.aspect = newWidth / newHeight;
+				this.camera.updateProjectionMatrix();
+			};
+
+			function reset() {
+				document.removeEventListener("mousemove", mouseMoveHandler);
+				document.removeEventListener("mouseup", reset);
+				document.removeEventListener("touchmove", mouseMoveHandler);
+				document.removeEventListener("touchend", reset);
+			}
+
+			document.addEventListener("mousemove", mouseMoveHandler);
+			document.addEventListener("mouseup", reset);
+			document.addEventListener("touchmove", mouseMoveHandler);
+			document.addEventListener("touchend", reset);
+		};
+		resizeHandle.addEventListener("mousedown", startResize);
+		resizeHandle.addEventListener("touchstart", startResize);
 	}
 
 	animate() {
@@ -125,11 +172,5 @@ export default class SceneInit {
 			text.lookAt(camera.position);
 		});
 		this.renderer.render(this.scene, this.camera);
-	}
-
-	onWindowResize() {
-		this.camera.aspect = window.innerWidth / window.innerHeight;
-		this.camera.updateProjectionMatrix();
-		this.renderer.setSize(window.innerWidth, window.innerHeight);
 	}
 }
