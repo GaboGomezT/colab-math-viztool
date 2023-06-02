@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function VectorCompAng({ args }) {
+export default function VectorCompAng1_1({ args }) {
 	const [sceneComponents, setSceneComponents] = useState([]);
 
 	function radianesAGrados(radianes) {

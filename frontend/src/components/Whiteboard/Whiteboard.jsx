@@ -11,7 +11,7 @@ import {
 	faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import jwt_decode from "jwt-decode";
-import VectorCompAng from "../3DComponentes/Unit1/VectorCompAng";
+import VectorCompAng1_1 from "../3DComponentes/Unit1/VectorCompAng1_1";
 import EqLine1_4_3 from "../3DComponentes/Unit1/EqLine1_4_3";
 
 export default function Whiteboard() {
@@ -420,7 +420,7 @@ export default function Whiteboard() {
 					</div>
 				</div>
 				<canvas className="canvas" ref={canvasRef} />
-				<VectorCompAng args={{ rx: 9, ry: 8, rz: 7 }} />
+				<VectorCompAng1_1 args={{ rx: 9, ry: 8, rz: 7 }} />
 				{/* <EqLine1_4_3 /> */}
 				{isOwner && (
 					<div>
