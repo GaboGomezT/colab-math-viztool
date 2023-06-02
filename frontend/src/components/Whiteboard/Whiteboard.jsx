@@ -420,8 +420,8 @@ export default function Whiteboard() {
 					</div>
 				</div>
 				<canvas className="canvas" ref={canvasRef} />
-				{/* <VectorCompAng args={{ rx: 9, ry: 8, rz: 7 }} /> */}
-				<EqLine1_4_3 />
+				<VectorCompAng args={{ rx: 9, ry: 8, rz: 7 }} />
+				{/* <EqLine1_4_3 /> */}
 				{isOwner && (
 					<div>
 						<div
