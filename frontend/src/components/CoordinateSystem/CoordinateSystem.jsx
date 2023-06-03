@@ -6,7 +6,7 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import "./CoordinateSystem.modules.css";
 
-export default function CoordinateSystem({ sceneComponents }) {
+export default function CoordinateSystem({ sceneComponents, description }) {
     const [renderedEnvironment, setRenderedEnvironment] = useState(null);
 
     useEffect(() => {
@@ -181,6 +181,7 @@ export default function CoordinateSystem({ sceneComponents }) {
             <div id="drag-bar"></div>
             <canvas id="myThreeJsCanvas" />
             <div id="resize-handle"></div>
+            <div className="coord-description">{description}</div>
         </div>
     );
 }

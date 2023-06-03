@@ -14,6 +14,7 @@ import jwt_decode from "jwt-decode";
 import VectorCompAng1_1 from "../3DComponentes/Unit1/VectorCompAng1_1";
 import EqLine1_4_3 from "../3DComponentes/Unit1/EqLine1_4_3";
 import VectorSum1_2 from "../3DComponentes/Unit1/VectorSum1_2";
+import VectorDot1_3 from "../3DComponentes/Unit1/VectorDot1_3";
 
 export default function Whiteboard() {
     let { boardId } = useParams();
@@ -449,7 +450,8 @@ export default function Whiteboard() {
                     </div>
                 </div>
                 <canvas className="canvas" ref={canvasRef} />
-                <VectorSum1_2
+                {/* <VectorCompAng1_1 args={{ rx: 9, ry: 8, rz: 7 }} /> */}
+                {/* <VectorSum1_2
                     args={{
                         vectors: [
                             [4, 3, 2],
@@ -457,8 +459,13 @@ export default function Whiteboard() {
                             [2, 1, 3],
                         ],
                     }}
+                /> */}
+                <VectorDot1_3
+                    args={{
+                        vectorA: [4, 3, 2],
+                        vectorB: [2, 5, 0],
+                    }}
                 />
-                {/* <VectorCompAng1_1 args={{ rx: 9, ry: 8, rz: 7 }} /> */}
                 {/* <EqLine1_4_3 /> */}
                 {isOwner && (
                     <div>
