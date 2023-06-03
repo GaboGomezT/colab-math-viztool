@@ -16,6 +16,7 @@ import EqLine1_4_3 from "../3DComponentes/Unit1/EqLine1_4_3";
 import VectorSum1_2 from "../3DComponentes/Unit1/VectorSum1_2";
 import VectorDot1_3 from "../3DComponentes/Unit1/VectorDot1_3";
 import EqLine1_4_1 from "../3DComponentes/Unit1/EqLine1_4_1";
+import EqLine1_4_2 from "../3DComponentes/Unit1/EqLine1_4_2";
 
 export default function Whiteboard() {
     let { boardId } = useParams();
@@ -467,10 +468,16 @@ export default function Whiteboard() {
                         vectorB: [2, 5, 0],
                     }}
                 /> */}
-                <EqLine1_4_1
+                {/* <EqLine1_4_1
                     args={{
                         point: [4, 5, 5],
                         vector: [3, 2, 1],
+                    }}
+                /> */}
+                <EqLine1_4_2
+                    args={{
+                        pointA: [4, 5, 5],
+                        pointB: [3, 2, 1],
                     }}
                 />
                 {/* <EqLine1_4_3 /> */}
