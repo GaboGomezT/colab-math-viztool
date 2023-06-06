@@ -484,7 +484,7 @@ export default function Whiteboard() {
                         pointB: [3, 2, 1],
                     }}
                 /> */}
-                {/* <EqLine1_4_3 /> */}
+                <EqLine1_4_3 />
                 {/* <VectorCross1_5
                     args={{ vectorA: [4, 3, 5], vectorB: [2, 5, 0] }}
                 /> */}
@@ -500,13 +500,13 @@ export default function Whiteboard() {
                         vectorB: [3, 4, 2],
                     }}
                 /> */}
-                <EqPlane1_6_3
+                {/* <EqPlane1_6_3
                     args={{
                         pointA: [1, 2, 3],
                         pointB: [3, 4, 2],
                         pointC: [3, 6, 2],
                     }}
-                />
+                /> */}
                 {isOwner && (
                     <div>
                         <div
