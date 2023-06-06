@@ -50,6 +50,7 @@
 	border: 1px solid black;
 	z-index: 1;
 	background-color: white;
+	width: 150px;
 }
 
 .tool {
@@ -59,6 +60,10 @@
 .color-select,
 .size-select {
 	font-size: 15px;
+}
+
+.unit1-select {
+	width: 67%;
 }
 
 .member-btn-wrapper {

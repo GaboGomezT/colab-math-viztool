@@ -11,16 +11,7 @@ import {
     faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import jwt_decode from "jwt-decode";
-import VectorCompAng1_1 from "../3DComponentes/Unit1/VectorCompAng1_1";
-import EqLine1_4_3 from "../3DComponentes/Unit1/EqLine1_4_3";
-import VectorSum1_2 from "../3DComponentes/Unit1/VectorSum1_2";
-import VectorDot1_3 from "../3DComponentes/Unit1/VectorDot1_3";
-import EqLine1_4_1 from "../3DComponentes/Unit1/EqLine1_4_1";
-import EqLine1_4_2 from "../3DComponentes/Unit1/EqLine1_4_2";
-import VectorCross1_5 from "../3DComponentes/Unit1/VectorCross1_5";
-import EqPlane1_6_1 from "../3DComponentes/Unit1/EqPlane1_6_1";
-import EqPlane1_6_2 from "../3DComponentes/Unit1/EqPlane1_6_2";
-import EqPlane1_6_3 from "../3DComponentes/Unit1/EqPlane1_6_3";
+import { mappingUnit1 } from "../Whiteboard/problemMapping.jsx";
 
 export default function Whiteboard() {
     let { boardId } = useParams();
@@ -41,6 +32,7 @@ export default function Whiteboard() {
     const [isOwner, setIsOwner] = useState(false);
     const [permissions, setPermissions] = useState({});
     const [canEdit, setCanEdit] = useState(false);
+    const [graphs, setGraphs] = useState([]);
 
     useEffect(() => {
         const authToken = localStorage.getItem("access_token");
@@ -392,6 +384,35 @@ export default function Whiteboard() {
         );
     };
 
+    const unitOneOptions = Object.entries(mappingUnit1).map(([key, value]) => {
+        return (
+            <option key={key} value={key}>
+                {key}
+            </option>
+        );
+    });
+
+    const handleUnitOneChange = (e) => {
+        mappingUnit1[e.target.value];
+        setGraphs((prevGraphs) => {
+            return [
+                ...prevGraphs,
+                {
+                    name: e.target.value,
+                    function: mappingUnit1[e.target.value].customFunction,
+                    form: mappingUnit1[e.target.value].customForm,
+                },
+            ];
+        });
+    };
+
+    const renderedGraphs = graphs.map((graph) => {
+        // return the graph function as a jsx element
+        const Component = graph.function;
+
+        return <Component key={graph.name} args={{}} />;
+    });
+
     return (
         <div className="whiteboard">
             <div className="canvas-navigation">
@@ -406,57 +427,61 @@ export default function Whiteboard() {
             </div>
             <div className="canvas-parent">
                 <div className="left-side-bar">
-                    <div className="tool-bar">
-                        <div className="tool">
-                            <select
-                                value={currentColor}
-                                onChange={(e) =>
-                                    handleColorChange(e.target.value)
-                                }
-                                className="color-select"
-                            >
-                                <option value="#000000">Negro</option>
-                                <option value="#ff0000">Rojo</option>
-                                <option value="#00ff00">Verde</option>
-                                <option value="#0000ff">Azúl</option>
-                                <option value="#ffff00">Amarillo</option>
-                                <option value="#ff00ff">Magenta</option>
-                            </select>
-                        </div>
-                        <div className="tool">
-                            <select
-                                value={currentBrushSize}
-                                onChange={(e) =>
-                                    handleBrushSizeChange(
-                                        Number(e.target.value)
-                                    )
-                                }
-                                className="size-select"
-                            >
-                                <option value={1}>1px</option>
-                                <option value={3}>3px</option>
-                                <option value={5}>5px</option>
-                                <option value={10}>10px</option>
-                            </select>
-                        </div>
-                        <div className="tool">
-                            <button
-                                onClick={() => {
-                                    setIsErasing(!isErasing);
-                                }}
-                                className={
-                                    isErasing
-                                        ? "eraser-btn-active"
-                                        : "eraser-btn"
-                                }
-                            >
-                                Borrar
-                            </button>
-                        </div>
+                    <div className="tool">
+                        <select
+                            value={currentColor}
+                            onChange={(e) => handleColorChange(e.target.value)}
+                            className="color-select"
+                        >
+                            <option value="#000000">Negro</option>
+                            <option value="#ff0000">Rojo</option>
+                            <option value="#00ff00">Verde</option>
+                            <option value="#0000ff">Azúl</option>
+                            <option value="#ffff00">Amarillo</option>
+                            <option value="#ff00ff">Magenta</option>
+                        </select>
+                    </div>
+                    <div className="tool">
+                        <select
+                            value={currentBrushSize}
+                            onChange={(e) =>
+                                handleBrushSizeChange(Number(e.target.value))
+                            }
+                            className="size-select"
+                        >
+                            <option value={1}>1px</option>
+                            <option value={3}>3px</option>
+                            <option value={5}>5px</option>
+                            <option value={10}>10px</option>
+                        </select>
+                    </div>
+                    <div className="tool">
+                        <button
+                            onClick={() => {
+                                setIsErasing(!isErasing);
+                            }}
+                            className={
+                                isErasing ? "eraser-btn-active" : "eraser-btn"
+                            }
+                        >
+                            Borrar
+                        </button>
+                    </div>
+                    <div className="tool">
+                        <select
+                            value=""
+                            onChange={handleUnitOneChange}
+                            name="unit1"
+                            id="unit1"
+                            className="unit1-select"
+                        >
+                            <option value="">Unidad 1</option>
+                            {unitOneOptions}
+                        </select>
                     </div>
                 </div>
                 <canvas className="canvas" ref={canvasRef} />
-
+                {renderedGraphs}
                 {isOwner && (
                     <div>
                         <div
