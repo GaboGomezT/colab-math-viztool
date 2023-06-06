@@ -484,7 +484,21 @@ export default function Whiteboard() {
                         pointB: [3, 2, 1],
                     }}
                 /> */}
-                <EqLine1_4_3 />
+                <EqLine1_4_3
+                    args={{
+                        point: {
+                            xo: 4,
+                            yo: 5,
+                            zo: 5,
+                        },
+                        planeEq: {
+                            A: 3,
+                            B: 2,
+                            C: 1,
+                            D: 5,
+                        },
+                    }}
+                />
                 {/* <VectorCross1_5
                     args={{ vectorA: [4, 3, 5], vectorB: [2, 5, 0] }}
                 /> */}

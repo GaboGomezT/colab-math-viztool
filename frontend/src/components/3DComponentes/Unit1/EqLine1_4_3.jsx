@@ -2,18 +2,34 @@ import React, { useEffect, useState } from "react";
 import * as THREE from "three";
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function EqLine1_4_3() {
+export default function EqLine1_4_3({ args }) {
     const [sceneComponents, setSceneComponents] = useState([]);
+    const [description, setDescription] = useState("");
 
     useEffect(() => {
         let components = [];
-        const xo = 1;
-        const yo = 1;
-        const zo = 1;
-        const A = 1;
-        const B = 1;
-        const C = 1;
-        const D = 0;
+
+        const { point, planeEq } = args;
+        const { xo, yo, zo } = point;
+        const { A, B, C, D } = planeEq;
+
+        // Given point (xo, yo, zo) and plane equation Ax + By + Cz + D = 0
+        // we can calculate the parametric equation of the line
+        // x = xo + at
+        // y = yo + bt
+        // z = zo + ct
+        // where (a, b, c) is the vector and t is a real number
+        // we can choose any value for t and we will get a point on the line
+        // create a string for the line equation in the form of r(t) = r0 + t * v
+        const lineEq = `r(t) = (${xo}, ${yo}, ${zo}) + t * (${A}, ${B}, ${C})`;
+        setDescription(lineEq);
+
+        // render the point as a red sphere
+        const pointGeometry = new THREE.SphereGeometry(0.3, 32, 32);
+        const pointMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
+        pointMesh.position.set(xo, yo, zo);
+        components.push(pointMesh);
 
         const planeMaterial = new THREE.MeshBasicMaterial({
             color: 0xffa500,
@@ -76,5 +92,10 @@ export default function EqLine1_4_3() {
 
         setSceneComponents(components);
     }, []);
-    return <CoordinateSystem sceneComponents={sceneComponents} />;
+    return (
+        <CoordinateSystem
+            sceneComponents={sceneComponents}
+            description={description}
+        />
+    );
 }
