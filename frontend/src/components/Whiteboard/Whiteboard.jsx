@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import jwt_decode from "jwt-decode";
 import { mappingUnit1 } from "../Whiteboard/problemMapping.jsx";
+import form1_1 from "../customForms/Unit1/Form1_1";
 
 export default function Whiteboard() {
     let { boardId } = useParams();
@@ -33,6 +34,7 @@ export default function Whiteboard() {
     const [permissions, setPermissions] = useState({});
     const [canEdit, setCanEdit] = useState(false);
     const [graphs, setGraphs] = useState([]);
+    const [forms, setForms] = useState([]);
 
     useEffect(() => {
         const authToken = localStorage.getItem("access_token");
@@ -393,26 +395,82 @@ export default function Whiteboard() {
     });
 
     const handleUnitOneChange = (e) => {
-        mappingUnit1[e.target.value];
-        setGraphs((prevGraphs) => {
-            return [
-                ...prevGraphs,
-                {
-                    name: e.target.value,
-                    function: mappingUnit1[e.target.value].customFunction,
-                    form: mappingUnit1[e.target.value].customForm,
-                },
-            ];
-        });
+        // Created a new graph in the canvas
+        // First the form/modal must be rendered to get the user input
+        // Then the graph must be rendered in the canvas
+
+        setForms([
+            {
+                name: e.target.value,
+                component: mappingUnit1[e.target.value].customForm,
+                newComponent: true,
+                data: null,
+            },
+        ]);
     };
 
     const renderedGraphs = graphs.map((graph) => {
         // return the graph function as a jsx element
-        const Component = graph.function;
-
+        const Component = graph.component;
+        // ToDo: change environment component styles to classes and add dynamic id to each component for individual canvas rendering
+        // ToDo: add forms to each component
+        // ToDo: add delete button to each component
+        // ToDo: handle socket events for canvas data
+        // ToDo: handle sheet feature for canvas data
         return <Component key={graph.name} args={{}} />;
     });
 
+    const handleGraphCreation = (graphName, args) => {
+        // Created a new graph in the canvas
+        // First the form/modal must be rendered to get the user input
+        // Then the graph must be rendered in the canvas
+        // make a post request to the backend to create a new graph with the given name and args
+        // the backend will return the graph id
+        fetch(`${import.meta.env.VITE_BACKEND_API_URL}/graphs`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": authToken,
+            },
+            body: JSON.stringify({
+                name: graphName,
+                args: args,
+                sheetId: currentSheet,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log("Success:", data);
+                setGraphs((prevGraphs) => {
+                    return [
+                        ...prevGraphs,
+                        {
+                            name: graphName,
+                            component: mappingUnit1[graphName].customFunction,
+                            form: mappingUnit1[graphName].customForm,
+                            newComponent: false,
+                            data: data,
+                        },
+                    ];
+                });
+                setForms([]);
+            });
+    };
+    const renderedGraphsForms = forms.map((form) => {
+        // return the graph function as a jsx element
+        const Component = form.component;
+        // If the graph is new, render the form
+        if (form.newComponent) {
+            return (
+                <Component
+                    key={form.name}
+                    handleGraphCreation={handleGraphCreation}
+                    graphName={form.name}
+                    newComponent={form.newComponent}
+                />
+            );
+        }
+    });
     return (
         <div className="whiteboard">
             <div className="canvas-navigation">
@@ -534,6 +592,7 @@ export default function Whiteboard() {
                         )}
                     </div>
                 )}
+                {renderedGraphsForms}
             </div>
             <div className="sheet-navigation">
                 <FontAwesomeIcon

@@ -9,12 +9,12 @@ import EqPlane1_6_1 from "../3DComponentes/Unit1/EqPlane1_6_1";
 import EqPlane1_6_2 from "../3DComponentes/Unit1/EqPlane1_6_2";
 import EqPlane1_6_3 from "../3DComponentes/Unit1/EqPlane1_6_3";
 
-import form1_1 from "../customForms/Unit1/form1_1";
+import Form1_1 from "../customForms/Unit1/Form1_1";
 
 export const mappingUnit1 = {
     "1.1 Componentes de un Vector": {
         customFunction: VectorCompAng1_1,
-        customForm: form1_1,
+        customForm: Form1_1,
     },
     "1.2 Suma de Vectores": {
         customFunction: VectorSum1_2,

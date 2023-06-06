@@ -10,7 +10,7 @@ export default function CoordinateSystem({ sceneComponents, description }) {
     const [renderedEnvironment, setRenderedEnvironment] = useState(null);
 
     useEffect(() => {
-        const environment = new SceneInit("myThreeJsCanvas");
+        const environment = new SceneInit("myThreeJsCanvas-id");
         environment.initialize();
         environment.animate();
 
@@ -177,10 +177,10 @@ export default function CoordinateSystem({ sceneComponents, description }) {
     }, [renderedEnvironment]);
 
     return (
-        <div id="coord-container">
-            <div id="drag-bar"></div>
-            <canvas id="myThreeJsCanvas" />
-            <div id="resize-handle"></div>
+        <div className="coord-container" id="coord-container-id">
+            <div className="drag-bar" id="drag-bar-id"></div>
+            <canvas className="myThreeJsCanvas" id="myThreeJsCanvas-id" />
+            <div className="resize-handle" id="resize-handle-id"></div>
             <div className="coord-description">{description}</div>
         </div>
     );
