@@ -456,71 +456,7 @@ export default function Whiteboard() {
                     </div>
                 </div>
                 <canvas className="canvas" ref={canvasRef} />
-                {/* <VectorCompAng1_1 args={{ rx: 9, ry: 8, rz: 7 }} /> */}
-                {/* <VectorSum1_2
-                    args={{
-                        vectors: [
-                            [4, 3, 2],
-                            [2, 5, 0],
-                            [2, 1, 3],
-                        ],
-                    }}
-                /> */}
-                {/* <VectorDot1_3
-                    args={{
-                        vectorA: [4, 3, 2],
-                        vectorB: [2, 5, 0],
-                    }}
-                /> */}
-                {/* <EqLine1_4_1
-                    args={{
-                        point: [4, 5, 5],
-                        vector: [3, 2, 1],
-                    }}
-                /> */}
-                {/* <EqLine1_4_2
-                    args={{
-                        pointA: [4, 5, 5],
-                        pointB: [3, 2, 1],
-                    }}
-                /> */}
-                <EqLine1_4_3
-                    args={{
-                        point: {
-                            xo: 4,
-                            yo: 5,
-                            zo: 5,
-                        },
-                        planeEq: {
-                            A: 3,
-                            B: 2,
-                            C: 1,
-                            D: 5,
-                        },
-                    }}
-                />
-                {/* <VectorCross1_5
-                    args={{ vectorA: [4, 3, 5], vectorB: [2, 5, 0] }}
-                /> */}
-                {/* <EqPlane1_6_1
-                    args={{
-                        point: [4, 5, 5],
-                        vector: [3, 2, 1],
-                    }}
-                /> */}
-                {/* <EqPlane1_6_2
-                    args={{
-                        vectorA: [1, 2, 3],
-                        vectorB: [3, 4, 2],
-                    }}
-                /> */}
-                {/* <EqPlane1_6_3
-                    args={{
-                        pointA: [1, 2, 3],
-                        pointB: [3, 4, 2],
-                        pointC: [3, 6, 2],
-                    }}
-                /> */}
+
                 {isOwner && (
                     <div>
                         <div
