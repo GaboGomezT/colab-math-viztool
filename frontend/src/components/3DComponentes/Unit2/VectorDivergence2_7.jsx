@@ -32,7 +32,7 @@ export default function VectorDivergence2_7({ args }) {
         const F1_dx = compile(derivative(f1, "x").toString());
         const F2_dy = compile(derivative(f2, "y").toString());
         const F3_dz = compile(derivative(f3, "z").toString());
-        console.log(derivative(f1, "x").toString());
+
         // Set the domain and resolution of the vector field
         const minX = -5;
         const maxX = 5;
@@ -44,10 +44,9 @@ export default function VectorDivergence2_7({ args }) {
 
         let minDivergence = Infinity;
         let maxDivergence = -Infinity;
-
         // Compute min and max divergence
-        for (let x = minX; x <= maxX; x += resolution) {
-            for (let y = minY; y <= maxY; y += resolution) {
+        for (let y = minY; y <= maxY; y += resolution) {
+            for (let x = minX; x <= maxX; x += resolution) {
                 for (let z = minZ; z <= maxZ; z += resolution) {
                     const divergence =
                         F1_dx.evaluate({ x: x, y: y, z: z }) +
@@ -60,8 +59,9 @@ export default function VectorDivergence2_7({ args }) {
             }
         }
 
-        for (let x = minX; x <= maxX; x += resolution) {
-            for (let y = minY; y <= maxY; y += resolution) {
+        // Compute min and max divergence
+        for (let y = minY; y <= maxY; y += resolution) {
+            for (let x = minX; x <= maxX; x += resolution) {
                 for (let z = minZ; z <= maxZ; z += resolution) {
                     const divergence =
                         F1_dx.evaluate({ x: x, y: y, z: z }) +
@@ -74,31 +74,18 @@ export default function VectorDivergence2_7({ args }) {
                         maxDivergence
                     );
 
-                    const geometry = new THREE.BufferGeometry();
-                    const vertices = new Float32Array([x, y, z]);
-                    geometry.setAttribute(
-                        "position",
-                        new THREE.BufferAttribute(vertices, 3)
+                    const geometry = new THREE.PlaneGeometry(
+                        resolution,
+                        resolution
                     );
-
-                    // Add the color attribute
-                    const colors = new Float32Array([
-                        color.r,
-                        color.g,
-                        color.b,
-                    ]);
-                    geometry.setAttribute(
-                        "color",
-                        new THREE.BufferAttribute(colors, 3)
-                    );
-
-                    const material = new THREE.PointsMaterial({
-                        size: 1,
-                        vertexColors: true, // Enable vertex colors
+                    const material = new THREE.MeshBasicMaterial({
+                        side: THREE.DoubleSide,
+                        color: color,
                     });
-
-                    const point = new THREE.Points(geometry, material);
-                    components.push(point);
+                    const plane = new THREE.Mesh(geometry, material);
+                    plane.rotation.x = Math.PI / 2; // Rotate the plane to make it parallel to the XZ plane
+                    plane.position.set(x, y, z);
+                    components.push(plane);
                 }
             }
         }
