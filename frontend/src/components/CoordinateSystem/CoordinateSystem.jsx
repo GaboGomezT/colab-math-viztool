@@ -60,7 +60,7 @@ export default function CoordinateSystem({
         const loader = new FontLoader();
         loader.load(
             // resource URL
-            "../node_modules/three/examples/fonts/helvetiker_bold.typeface.json",
+            "/helvetiker_bold.typeface.json",
 
             // onLoad callback
             function (font) {
