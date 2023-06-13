@@ -13,6 +13,7 @@ import VectorDivergence2_7 from "../3DComponentes/Unit2/VectorDivergence2_7";
 import DoubleIntegral3_2 from "../3DComponentes/Unit3/DoubleIntegral3_2";
 
 import Form1_1 from "../customForms/Unit1/Form1_1";
+import Form1_2 from "../customForms/Unit1/Form1_2";
 
 export const mappingUnit1 = {
     "1.1 Componentes de un Vector": {
@@ -21,7 +22,7 @@ export const mappingUnit1 = {
     },
     "1.2 Suma de Vectores": {
         customFunction: VectorSum1_2,
-        // customForm: form1_1,
+        customForm: Form1_2,
     },
     "1.3 Producto Punto": {
         customFunction: VectorDot1_3,
