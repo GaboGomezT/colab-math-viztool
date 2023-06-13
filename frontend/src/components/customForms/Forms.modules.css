@@ -1,0 +1,24 @@
+.number-input, .string-input{
+    display: block;
+    
+}
+
+.number-input input {
+	width: 60px;
+}
+
+.graph-form{
+    position: absolute;
+	right: 0;
+	top: 100px;
+	z-index: 1;
+	background-color: white;
+	width: 250px;
+	border: black 1px solid;
+	padding: 1rem;
+}
+
+.graph-form button {
+    width: 50%;
+    margin-top: 1rem;
+}

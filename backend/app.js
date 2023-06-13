@@ -6,6 +6,7 @@ const cors = require("cors");
 const http = require("http");
 const socketIO = require("socket.io");
 const prisma = require("./db.js");
+const uuid = require("uuid");
 
 const app = express();
 app.use(express.json());
@@ -98,6 +99,61 @@ io.on("connection", (socket) => {
 			io.to(boardId).emit("permissionsServerUpdate", userId, newPermission);
 		}
 	);
+
+	// recieve creation of graph in sheet from client
+	socket.on("createGraph", async (data) => {
+		// create UUID for graph
+		const newGraph = {
+			id: uuid.v4(),
+			name: data.name,
+			args: data.args,
+			sheetId: data.sheetId,
+		};
+		// add graph to sheet
+		await prisma.sheet.update({
+			where: {
+				id: data.sheetId,
+			},
+			data: {
+				graphs: {
+					push: newGraph,
+				},
+			},
+		});
+
+		io.to(data.boardId).emit("graphCreated", newGraph);
+	});
+
+	// recieve deletion of graph in sheet from client
+	socket.on("deleteGraph", async (data) => {
+
+		// get all graphs in sheet
+		const sheet = await prisma.sheet.findUnique({
+			where: {
+				id: data.sheetId,
+			}
+		});
+
+		// filter out graph to be deleted
+		const newGraphs = sheet.graphs.filter((graph) => {
+			return graph.id !== data.graphId;
+		});
+
+		// update sheet with new graphs
+		await prisma.sheet.update({
+			where: {
+				id: data.sheetId,
+			},
+			data: {
+				graphs: {
+					set: newGraphs,
+				},
+			},
+		});
+
+
+		io.to(data.boardId).emit("graphDeleted", data.graphId);
+	});
 });
 
 const PORT = process.env.PORT || 3000;
