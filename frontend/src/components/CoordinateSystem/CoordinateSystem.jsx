@@ -10,7 +10,6 @@ export default function CoordinateSystem({ sceneComponents, description, id }) {
     const [renderedEnvironment, setRenderedEnvironment] = useState(null);
 
     useEffect(() => {
-        console.log("CoordinateSystem ID", id);
         const environment = new SceneInit(id);
         environment.initialize();
         environment.animate();
