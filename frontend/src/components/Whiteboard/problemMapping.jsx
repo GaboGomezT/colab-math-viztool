@@ -14,6 +14,7 @@ import DoubleIntegral3_2 from "../3DComponentes/Unit3/DoubleIntegral3_2";
 
 import Form1_1 from "../customForms/Unit1/Form1_1";
 import Form1_2 from "../customForms/Unit1/Form1_2";
+import Form1_3 from "../customForms/Unit1/Form1_3";
 
 export const mappingUnit1 = {
     "1.1 Componentes de un Vector": {
@@ -26,7 +27,7 @@ export const mappingUnit1 = {
     },
     "1.3 Producto Punto": {
         customFunction: VectorDot1_3,
-        // customForm: form1_1,
+        customForm: Form1_3,
     },
     "1.4.1 Ecuacion de la Recta": {
         customFunction: EqLine1_4_1,
