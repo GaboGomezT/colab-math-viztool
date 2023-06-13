@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "../Forms.modules.css";
 
-export default function Form1_1({
+export default function Form1({
     handleGraphCreation,
     graphName,
     newComponent,
