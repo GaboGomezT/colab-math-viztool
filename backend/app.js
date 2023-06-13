@@ -123,6 +123,37 @@ io.on("connection", (socket) => {
 
 		io.to(data.boardId).emit("graphCreated", newGraph);
 	});
+
+	// recieve deletion of graph in sheet from client
+	socket.on("deleteGraph", async (data) => {
+
+		// get all graphs in sheet
+		const sheet = await prisma.sheet.findUnique({
+			where: {
+				id: data.sheetId,
+			}
+		});
+
+		// filter out graph to be deleted
+		const newGraphs = sheet.graphs.filter((graph) => {
+			return graph.id !== data.graphId;
+		});
+
+		// update sheet with new graphs
+		await prisma.sheet.update({
+			where: {
+				id: data.sheetId,
+			},
+			data: {
+				graphs: {
+					set: newGraphs,
+				},
+			},
+		});
+
+
+		io.to(data.boardId).emit("graphDeleted", data.graphId);
+	});
 });
 
 const PORT = process.env.PORT || 3000;

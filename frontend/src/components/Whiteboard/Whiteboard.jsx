@@ -52,7 +52,6 @@ export default function Whiteboard() {
             }
         });
         socket.current.on("graphCreated", (data) => {
-            console.log("Success:", data);
             setGraphs((prevGraphs) => {
                 return [
                     ...prevGraphs,
@@ -66,6 +65,12 @@ export default function Whiteboard() {
                 ];
             });
             setForms([]);
+        });
+
+        socket.current.on("graphDeleted", (graphId) => {
+            setGraphs((prevGraphs) => {
+                return prevGraphs.filter((graph) => graph.id !== graphId);
+            });
         });
 
         const canvas = new fabric.Canvas(canvasRef.current);
@@ -122,14 +127,19 @@ export default function Whiteboard() {
                         return [
                             ...prevGraphs,
                             ...sheet.graphs.map((graph) => {
-                                return {
-                                    id: graph.id,
-                                    name: graph.name,
-                                    component:
-                                        mappingUnit1[graph.name].customFunction,
-                                    args: graph.args,
-                                    sheetId: sheet.id,
-                                };
+                                if (Object.keys(graph).length !== 0) {
+                                    return {
+                                        id: graph.id,
+                                        name: graph.name,
+                                        component:
+                                            mappingUnit1[graph.name]
+                                                .customFunction,
+                                        args: graph.args,
+                                        sheetId: sheet.id,
+                                    };
+                                } else {
+                                    return {};
+                                }
                             }),
                         ];
                     });
@@ -439,17 +449,33 @@ export default function Whiteboard() {
         ]);
     };
 
+    const handleDeleteGraph = (graphId) => {
+        // make a delete request to the backend to delete the graph with the given id
+        socket.current.emit("deleteGraph", {
+            graphId: graphId,
+            sheetId: currentSheet,
+            boardId: boardId,
+        });
+        // remove the graph from the graphs array
+        setGraphs((prevGraphs) => {
+            return prevGraphs.filter((graph) => graph.id !== graphId);
+        });
+    };
+
     const renderedGraphs = graphs.map((graph) => {
-        // check if the sheetId is the same as currentId
+        // check if the sheetId is the same as currentSheet
         if (graph.sheetId === currentSheet) {
             // return the graph function as a jsx element
             const Component = graph.component;
-            // ToDo: change environment component styles to classes and add dynamic id to each component for individual canvas rendering
-            // ToDo: add forms to each component
-            // ToDo: add delete button to each component
-            // ToDo: handle socket events for canvas data
-            // ToDo: handle sheet feature for canvas data
-            return <Component key={graph.id} args={graph.args} id={graph.id} />;
+            return (
+                <Component
+                    key={graph.id}
+                    args={graph.args}
+                    id={graph.id}
+                    handleDeleteGraph={handleDeleteGraph}
+                    canEdit={canEdit}
+                />
+            );
         } else {
             return null;
         }
@@ -537,18 +563,20 @@ export default function Whiteboard() {
                             Borrar
                         </button>
                     </div>
-                    <div className="tool">
-                        <select
-                            value=""
-                            onChange={handleUnitOneChange}
-                            name="unit1"
-                            id="unit1"
-                            className="unit1-select"
-                        >
-                            <option value="">Unidad 1</option>
-                            {unitOneOptions}
-                        </select>
-                    </div>
+                    {canEdit && (
+                        <div className="tool">
+                            <select
+                                value=""
+                                onChange={handleUnitOneChange}
+                                name="unit1"
+                                id="unit1"
+                                className="unit1-select"
+                            >
+                                <option value="">Unidad 1</option>
+                                {unitOneOptions}
+                            </select>
+                        </div>
+                    )}
                 </div>
                 <canvas className="canvas" ref={canvasRef} />
                 {renderedGraphs}

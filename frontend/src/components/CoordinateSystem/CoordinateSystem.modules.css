@@ -31,3 +31,18 @@
 	width: 80%;
 	z-index: 10;
 }
+
+.delete-graph {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    background-color: red;
+    color: white;
+    cursor: pointer;
+    z-index: 20;
+	height: 30px;
+	text-align: center;
+	display: flex;
+	align-items: center;
+}

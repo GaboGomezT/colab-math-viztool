@@ -3,7 +3,12 @@ import * as THREE from "three";
 
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function VectorCompAng1_1({ args, id }) {
+export default function VectorCompAng1_1({
+    args,
+    id,
+    handleDeleteGraph,
+    canEdit,
+}) {
     const [sceneComponents, setSceneComponents] = useState([]);
 
     function radianesAGrados(radianes) {
@@ -189,5 +194,12 @@ export default function VectorCompAng1_1({ args, id }) {
         // Add the components to the sceneComponents array
         setSceneComponents(components);
     }, []);
-    return <CoordinateSystem sceneComponents={sceneComponents} id={id} />;
+    return (
+        <CoordinateSystem
+            sceneComponents={sceneComponents}
+            id={id}
+            handleDeleteGraph={handleDeleteGraph}
+            canEdit={canEdit}
+        />
+    );
 }
