@@ -12,7 +12,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import jwt_decode from "jwt-decode";
 import { mappingUnit1 } from "../Whiteboard/problemMapping.jsx";
-import form1_1 from "../customForms/Unit1/Form1_1";
 
 export default function Whiteboard() {
     let { boardId } = useParams();
