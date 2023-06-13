@@ -8,6 +8,9 @@ import VectorCross1_5 from "../3DComponentes/Unit1/VectorCross1_5";
 import EqPlane1_6_1 from "../3DComponentes/Unit1/EqPlane1_6_1";
 import EqPlane1_6_2 from "../3DComponentes/Unit1/EqPlane1_6_2";
 import EqPlane1_6_3 from "../3DComponentes/Unit1/EqPlane1_6_3";
+import VectorField2_6 from "../3DComponentes/Unit2/VectorField2_6";
+import VectorDivergence2_7 from "../3DComponentes/Unit2/VectorDivergence2_7";
+import DoubleIntegral3_2 from "../3DComponentes/Unit3/DoubleIntegral3_2";
 
 import Form1_1 from "../customForms/Unit1/Form1_1";
 
