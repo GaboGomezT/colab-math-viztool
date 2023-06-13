@@ -572,7 +572,7 @@ export default function Whiteboard() {
                                 id="unit1"
                                 className="unit1-select"
                             >
-                                <option value="">Unidad 1</option>
+                                <option value="">Gráficas</option>
                                 {unitOneOptions}
                             </select>
                         </div>
