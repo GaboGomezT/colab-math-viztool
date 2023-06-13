@@ -58,6 +58,7 @@ model Sheet {
     created DateTime @default(now())
     board   Board    @relation(fields: [boardId], references: [id])
     boardId String   @db.ObjectId
+    graphs  Json[]
 }
 
 model Permission {

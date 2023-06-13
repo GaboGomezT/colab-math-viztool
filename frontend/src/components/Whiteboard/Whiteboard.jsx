@@ -52,6 +52,21 @@ export default function Whiteboard() {
                 canvas.isDrawingMode = access === "WRITE" ? true : false;
             }
         });
+        socket.current.on("graphCreated", (data) => {
+            console.log("Success:", data);
+            setGraphs((prevGraphs) => {
+                return [
+                    ...prevGraphs,
+                    {
+                        id: data.id,
+                        name: data.name,
+                        component: mappingUnit1[data.name].customFunction,
+                        args: data.args,
+                    },
+                ];
+            });
+            setForms([]);
+        });
 
         const canvas = new fabric.Canvas(canvasRef.current);
 
@@ -417,7 +432,7 @@ export default function Whiteboard() {
         // ToDo: add delete button to each component
         // ToDo: handle socket events for canvas data
         // ToDo: handle sheet feature for canvas data
-        return <Component key={graph.name} args={{}} />;
+        return <Component key={graph.id} args={graph.args} id={graph.id} />;
     });
 
     const handleGraphCreation = (graphName, args) => {
@@ -426,35 +441,12 @@ export default function Whiteboard() {
         // Then the graph must be rendered in the canvas
         // make a post request to the backend to create a new graph with the given name and args
         // the backend will return the graph id
-        fetch(`${import.meta.env.VITE_BACKEND_API_URL}/graphs`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "x-access-token": authToken,
-            },
-            body: JSON.stringify({
-                name: graphName,
-                args: args,
-                sheetId: currentSheet,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Success:", data);
-                setGraphs((prevGraphs) => {
-                    return [
-                        ...prevGraphs,
-                        {
-                            name: graphName,
-                            component: mappingUnit1[graphName].customFunction,
-                            form: mappingUnit1[graphName].customForm,
-                            newComponent: false,
-                            data: data,
-                        },
-                    ];
-                });
-                setForms([]);
-            });
+        socket.current.emit("createGraph", {
+            name: graphName,
+            args: args,
+            sheetId: currentSheet,
+            boardId: boardId,
+        });
     };
     const renderedGraphsForms = forms.map((form) => {
         // return the graph function as a jsx element

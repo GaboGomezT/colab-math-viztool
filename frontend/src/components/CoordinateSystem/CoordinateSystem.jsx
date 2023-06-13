@@ -6,11 +6,12 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import "./CoordinateSystem.modules.css";
 
-export default function CoordinateSystem({ sceneComponents, description }) {
+export default function CoordinateSystem({ sceneComponents, description, id }) {
     const [renderedEnvironment, setRenderedEnvironment] = useState(null);
 
     useEffect(() => {
-        const environment = new SceneInit("myThreeJsCanvas-id");
+        console.log("CoordinateSystem ID", id);
+        const environment = new SceneInit(id);
         environment.initialize();
         environment.animate();
 
@@ -177,10 +178,10 @@ export default function CoordinateSystem({ sceneComponents, description }) {
     }, [renderedEnvironment]);
 
     return (
-        <div className="coord-container" id="coord-container-id">
-            <div className="drag-bar" id="drag-bar-id"></div>
-            <canvas className="myThreeJsCanvas" id="myThreeJsCanvas-id" />
-            <div className="resize-handle" id="resize-handle-id"></div>
+        <div className="coord-container" id={`coord-container-${id}}`}>
+            <div className="drag-bar" id={`drag-bar-${id}`}></div>
+            <canvas className="myThreeJsCanvas" id={`myThreeJsCanvas-${id}`} />
+            <div className="resize-handle" id={`resize-handle-${id}`}></div>
             <div className="coord-description">{description}</div>
         </div>
     );

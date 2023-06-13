@@ -39,10 +39,16 @@ export default class SceneInit {
         this.camera.position.z = 20;
 
         // NOTE: Specify a canvas which is already created in the HTML.
-        const canvas = document.getElementById(this.canvasId);
-        const canvasContainer = document.getElementById("coord-container-id");
-        const dragBar = document.getElementById("drag-bar-id");
-        const resizeHandle = document.getElementById("resize-handle-id");
+        const canvas = document.getElementById(
+            `myThreeJsCanvas-${this.canvasId}`
+        );
+        const canvasContainer = document.getElementById(
+            `coord-container-${this.canvasId}}`
+        );
+        const dragBar = document.getElementById(`drag-bar-${this.canvasId}`);
+        const resizeHandle = document.getElementById(
+            `resize-handle-${this.canvasId}`
+        );
 
         this.renderer = new THREE.WebGLRenderer({
             canvas,
