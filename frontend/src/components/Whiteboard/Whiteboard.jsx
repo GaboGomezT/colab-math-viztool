@@ -61,6 +61,7 @@ export default function Whiteboard() {
                         name: data.name,
                         component: mappingUnit1[data.name].customFunction,
                         args: data.args,
+                        sheetId: data.sheetId,
                     },
                 ];
             });
@@ -116,6 +117,21 @@ export default function Whiteboard() {
                                 index: board.sheets.indexOf(sheet),
                             },
                         };
+                    });
+                    setGraphs((prevGraphs) => {
+                        return [
+                            ...prevGraphs,
+                            ...sheet.graphs.map((graph) => {
+                                return {
+                                    id: graph.id,
+                                    name: graph.name,
+                                    component:
+                                        mappingUnit1[graph.name].customFunction,
+                                    args: graph.args,
+                                    sheetId: sheet.id,
+                                };
+                            }),
+                        ];
                     });
                 });
 
@@ -424,14 +440,19 @@ export default function Whiteboard() {
     };
 
     const renderedGraphs = graphs.map((graph) => {
-        // return the graph function as a jsx element
-        const Component = graph.component;
-        // ToDo: change environment component styles to classes and add dynamic id to each component for individual canvas rendering
-        // ToDo: add forms to each component
-        // ToDo: add delete button to each component
-        // ToDo: handle socket events for canvas data
-        // ToDo: handle sheet feature for canvas data
-        return <Component key={graph.id} args={graph.args} id={graph.id} />;
+        // check if the sheetId is the same as currentId
+        if (graph.sheetId === currentSheet) {
+            // return the graph function as a jsx element
+            const Component = graph.component;
+            // ToDo: change environment component styles to classes and add dynamic id to each component for individual canvas rendering
+            // ToDo: add forms to each component
+            // ToDo: add delete button to each component
+            // ToDo: handle socket events for canvas data
+            // ToDo: handle sheet feature for canvas data
+            return <Component key={graph.id} args={graph.args} id={graph.id} />;
+        } else {
+            return null;
+        }
     });
 
     const handleGraphCreation = (graphName, args) => {
