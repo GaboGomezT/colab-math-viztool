@@ -17,6 +17,7 @@ import Form1_2 from "../customForms/Unit1/Form1_2";
 import Form1_3 from "../customForms/Unit1/Form1_3";
 import Form1_4_1 from "../customForms/Unit1/Form1_4_1";
 import Form1_4_2 from "../customForms/Unit1/Form1_4_2";
+import Form1_4_3 from "../customForms/Unit1/Form1_4_3";
 
 export const mappingUnit1 = {
     "1.1 Componentes de un Vector": {
@@ -41,7 +42,7 @@ export const mappingUnit1 = {
     },
     "1.4.3 Ecuacion de la Recta": {
         customFunction: EqLine1_4_3,
-        // customForm: form1_1,
+        customForm: Form1_4_3,
     },
     "1.5 Producto Cruz": {
         customFunction: VectorCross1_5,
