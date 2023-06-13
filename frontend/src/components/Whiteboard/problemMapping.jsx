@@ -54,7 +54,7 @@ export const mappingUnit1 = {
     },
     "1.6.2 Ecuacion del Plano": {
         customFunction: EqPlane1_6_2,
-        // customForm: form1_1,
+        customForm: Form1_3,
     },
     "1.6.3 Ecuacion del Plano": {
         customFunction: EqPlane1_6_3,
