@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as THREE from "three";
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function EqPlane1_6_3({ args }) {
+export default function EqPlane1_6_3({ args, id, handleDeleteGraph, canEdit }) {
     const [sceneComponents, setSceneComponents] = useState([]);
     const [description, setDescription] = useState("");
     function arePointsCollinear(x1, y1, z1, x2, y2, z2, x3, y3, z3) {
@@ -117,6 +117,9 @@ export default function EqPlane1_6_3({ args }) {
         <CoordinateSystem
             sceneComponents={sceneComponents}
             description={description}
+            id={id}
+            handleDeleteGraph={handleDeleteGraph}
+            canEdit={canEdit}
         />
     );
 }
