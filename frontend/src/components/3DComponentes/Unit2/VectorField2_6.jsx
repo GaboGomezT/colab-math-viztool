@@ -3,7 +3,12 @@ import * as THREE from "three";
 import { compile } from "mathjs";
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function VectorField2_6({ args }) {
+export default function VectorField2_6({
+    args,
+    id,
+    handleDeleteGraph,
+    canEdit,
+}) {
     const [sceneComponents, setSceneComponents] = useState([]);
     const [description, setDescription] = useState("");
 
@@ -52,6 +57,9 @@ export default function VectorField2_6({ args }) {
         <CoordinateSystem
             sceneComponents={sceneComponents}
             description={description}
+            id={id}
+            handleDeleteGraph={handleDeleteGraph}
+            canEdit={canEdit}
         />
     );
 }

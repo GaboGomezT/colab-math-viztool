@@ -19,6 +19,7 @@ import Form1_4_1 from "../customForms/Unit1/Form1_4_1";
 import Form1_4_2 from "../customForms/Unit1/Form1_4_2";
 import Form1_4_3 from "../customForms/Unit1/Form1_4_3";
 import Form1_6_3 from "../customForms/Unit1/Form1_6_3";
+import Form2_6 from "../customForms/Unit2/Form2_6";
 
 export const mappingUnit1 = {
     "1.1 Componentes de un Vector": {
@@ -60,5 +61,9 @@ export const mappingUnit1 = {
     "1.6.3 Ecuacion del Plano": {
         customFunction: EqPlane1_6_3,
         customForm: Form1_6_3,
+    },
+    "2.6 Campo Vectorial": {
+        customFunction: VectorField2_6,
+        customForm: Form2_6,
     },
 };
