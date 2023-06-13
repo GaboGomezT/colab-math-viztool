@@ -3,7 +3,12 @@ import * as THREE from "three";
 import { compile } from "mathjs";
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function DoubleIntegral3_2({ args }) {
+export default function DoubleIntegral3_2({
+    args,
+    id,
+    handleDeleteGraph,
+    canEdit,
+}) {
     const [sceneComponents, setSceneComponents] = useState([]);
 
     useEffect(() => {
@@ -127,5 +132,12 @@ export default function DoubleIntegral3_2({ args }) {
         setSceneComponents(components);
     }, []);
 
-    return <CoordinateSystem sceneComponents={sceneComponents} />;
+    return (
+        <CoordinateSystem
+            sceneComponents={sceneComponents}
+            id={id}
+            handleDeleteGraph={handleDeleteGraph}
+            canEdit={canEdit}
+        />
+    );
 }

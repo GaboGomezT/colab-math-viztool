@@ -20,6 +20,7 @@ import Form1_4_2 from "../customForms/Unit1/Form1_4_2";
 import Form1_4_3 from "../customForms/Unit1/Form1_4_3";
 import Form1_6_3 from "../customForms/Unit1/Form1_6_3";
 import Form2_6 from "../customForms/Unit2/Form2_6";
+import Form3_2 from "../customForms/Unit3/Form3_2";
 
 export const mappingUnit1 = {
     "1.1 Componentes de un Vector": {
@@ -69,5 +70,9 @@ export const mappingUnit1 = {
     "2.7 Divergencia": {
         customFunction: VectorDivergence2_7,
         customForm: Form2_6,
+    },
+    "3.2 Integral Doble Y Simple": {
+        customFunction: DoubleIntegral3_2,
+        customForm: Form3_2,
     },
 };
