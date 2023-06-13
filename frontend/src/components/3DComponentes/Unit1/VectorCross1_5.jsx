@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import * as THREE from "three";
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function VectorCross1_5({ args }) {
+export default function VectorCross1_5({
+    args,
+    id,
+    handleDeleteGraph,
+    canEdit,
+}) {
     const [sceneComponents, setSceneComponents] = useState([]);
     const [description, setDescription] = useState("");
 
@@ -100,6 +105,9 @@ export default function VectorCross1_5({ args }) {
         <CoordinateSystem
             sceneComponents={sceneComponents}
             description={description}
+            id={id}
+            handleDeleteGraph={handleDeleteGraph}
+            canEdit={canEdit}
         />
     );
 }

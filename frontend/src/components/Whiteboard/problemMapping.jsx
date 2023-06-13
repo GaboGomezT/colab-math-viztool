@@ -46,7 +46,7 @@ export const mappingUnit1 = {
     },
     "1.5 Producto Cruz": {
         customFunction: VectorCross1_5,
-        // customForm: form1_1,
+        customForm: Form1_3,
     },
     "1.6.1 Ecuacion del Plano": {
         customFunction: EqPlane1_6_1,
