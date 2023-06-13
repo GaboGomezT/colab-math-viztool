@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as THREE from "three";
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function EqPlane1_6_1({ args }) {
+export default function EqPlane1_6_1({ args, id, handleDeleteGraph, canEdit }) {
     const [sceneComponents, setSceneComponents] = useState([]);
     const [description, setDescription] = useState("");
 
@@ -58,7 +58,13 @@ export default function EqPlane1_6_1({ args }) {
             )
         );
         components.push(planeMesh);
-
+        const pointOnPlane = point; // replace with any point on the plane
+        const normalVector = [vector[0], vector[1], vector[2]]; // replace with the normal vector of the plane
+        const D =
+            -1 *
+            (normalVector[0] * pointOnPlane[0] +
+                normalVector[1] * pointOnPlane[1] +
+                normalVector[2] * pointOnPlane[2]);
         // create a string for the plane equation in the form of Ax + By + Cz + D = 0
         const planeEquation =
             "Ecuación: " +
@@ -67,7 +73,9 @@ export default function EqPlane1_6_1({ args }) {
             vector[1] +
             "y + " +
             vector[2] +
-            "z + D = 0";
+            "z + (" +
+            D +
+            ") = 0";
 
         setDescription(planeEquation);
 
@@ -77,6 +85,9 @@ export default function EqPlane1_6_1({ args }) {
         <CoordinateSystem
             sceneComponents={sceneComponents}
             description={description}
+            id={id}
+            handleDeleteGraph={handleDeleteGraph}
+            canEdit={canEdit}
         />
     );
 }
