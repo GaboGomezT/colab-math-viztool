@@ -16,6 +16,7 @@ import Form1_1 from "../customForms/Unit1/Form1_1";
 import Form1_2 from "../customForms/Unit1/Form1_2";
 import Form1_3 from "../customForms/Unit1/Form1_3";
 import Form1_4_1 from "../customForms/Unit1/Form1_4_1";
+import Form1_4_2 from "../customForms/Unit1/Form1_4_2";
 
 export const mappingUnit1 = {
     "1.1 Componentes de un Vector": {
@@ -36,7 +37,7 @@ export const mappingUnit1 = {
     },
     "1.4.2 Ecuacion de la Recta": {
         customFunction: EqLine1_4_2,
-        // customForm: form1_1,
+        customForm: Form1_4_2,
     },
     "1.4.3 Ecuacion de la Recta": {
         customFunction: EqLine1_4_3,
