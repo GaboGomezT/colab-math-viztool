@@ -3,7 +3,12 @@ import * as THREE from "three";
 import { compile, derivative } from "mathjs";
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function VectorDivergence2_7({ args }) {
+export default function VectorDivergence2_7({
+    args,
+    id,
+    handleDeleteGraph,
+    canEdit,
+}) {
     const [sceneComponents, setSceneComponents] = useState([]);
     const [description, setDescription] = useState("");
 
@@ -97,6 +102,9 @@ export default function VectorDivergence2_7({ args }) {
         <CoordinateSystem
             sceneComponents={sceneComponents}
             description={description}
+            id={id}
+            handleDeleteGraph={handleDeleteGraph}
+            canEdit={canEdit}
         />
     );
 }

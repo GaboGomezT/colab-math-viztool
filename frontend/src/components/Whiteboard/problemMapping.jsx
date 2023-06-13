@@ -66,4 +66,8 @@ export const mappingUnit1 = {
         customFunction: VectorField2_6,
         customForm: Form2_6,
     },
+    "2.7 Divergencia": {
+        customFunction: VectorDivergence2_7,
+        customForm: Form2_6,
+    },
 };
