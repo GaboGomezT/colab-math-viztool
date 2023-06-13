@@ -3,6 +3,10 @@
     
 }
 
+.number-input input {
+	width: 60px;
+}
+
 .graph-form{
     position: absolute;
 	right: 0;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import * as THREE from "three";
 import CoordinateSystem from "../../CoordinateSystem/CoordinateSystem";
 
-export default function EqLine1_4_1({ args }) {
+export default function EqLine1_4_1({ args, id, handleDeleteGraph, canEdit }) {
     const [sceneComponents, setSceneComponents] = useState([]);
     const [description, setDescription] = useState("");
 
@@ -75,6 +75,9 @@ export default function EqLine1_4_1({ args }) {
         <CoordinateSystem
             sceneComponents={sceneComponents}
             description={description}
+            id={id}
+            handleDeleteGraph={handleDeleteGraph}
+            canEdit={canEdit}
         />
     );
 }
