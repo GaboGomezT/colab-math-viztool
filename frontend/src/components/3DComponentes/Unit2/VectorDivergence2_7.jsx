@@ -33,23 +33,24 @@ export default function VectorDivergence2_7({
         let components = [];
         const { f1, f2, f3 } = args;
 
-        // Compute the partial derivatives
-        const F1_dx = compile(derivative(f1, "x").toString());
-        const F2_dy = compile(derivative(f2, "y").toString());
-        const F3_dz = compile(derivative(f3, "z").toString());
-
-        // Set the domain and resolution of the vector field
-        const minX = -5;
-        const maxX = 5;
-        const minY = -5;
-        const maxY = 5;
-        const minZ = -5;
-        const maxZ = 5;
-        const resolution = 1;
-
-        let minDivergence = Infinity;
-        let maxDivergence = -Infinity;
         try {
+            // Compute the partial derivatives
+            const F1_dx = compile(derivative(f1, "x").toString());
+            const F2_dy = compile(derivative(f2, "y").toString());
+            const F3_dz = compile(derivative(f3, "z").toString());
+
+            // Set the domain and resolution of the vector field
+            const minX = -5;
+            const maxX = 5;
+            const minY = -5;
+            const maxY = 5;
+            const minZ = -5;
+            const maxZ = 5;
+            const resolution = 1;
+
+            let minDivergence = Infinity;
+            let maxDivergence = -Infinity;
+
             // Compute min and max divergence
             for (let y = minY; y <= maxY; y += resolution) {
                 for (let x = minX; x <= maxX; x += resolution) {

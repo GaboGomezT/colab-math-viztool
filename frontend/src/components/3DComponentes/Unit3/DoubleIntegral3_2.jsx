@@ -16,40 +16,40 @@ export default function DoubleIntegral3_2({
         let components = [];
         const { f_string, a_string, b_string, c, d } = args;
 
-        const f_expr = compile(f_string);
-        const a_expr = compile(a_string);
-        const b_expr = compile(b_string);
-
-        // El número de subintervalos
-        const n = 100;
-        const numPlanes = 5; // El número de planos que se cortan con la función
-
-        // El paso en cada dimensión
-        const dy = (d - c) / n;
-
-        // Crear la geometría
-        const geometry = new THREE.BufferGeometry();
-        const planeGeometry = new THREE.BufferGeometry();
-        const vertices = [];
-        const planeVertices = [];
-        const indices = [];
-        const planeIndices = [];
-
-        const planeMaterial = new THREE.MeshBasicMaterial({
-            color: 0x888888,
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.5,
-        });
-
-        const domainMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffff00,
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.5,
-        });
-
         try {
+            const f_expr = compile(f_string);
+            const a_expr = compile(a_string);
+            const b_expr = compile(b_string);
+
+            // El número de subintervalos
+            const n = 100;
+            const numPlanes = 5; // El número de planos que se cortan con la función
+
+            // El paso en cada dimensión
+            const dy = (d - c) / n;
+
+            // Crear la geometría
+            const geometry = new THREE.BufferGeometry();
+            const planeGeometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const planeVertices = [];
+            const indices = [];
+            const planeIndices = [];
+
+            const planeMaterial = new THREE.MeshBasicMaterial({
+                color: 0x888888,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.5,
+            });
+
+            const domainMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffff00,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.5,
+            });
+
             for (let i = 0; i <= n; i++) {
                 const y = c + i * dy;
                 const xStart = a_expr.evaluate({ y: y });
