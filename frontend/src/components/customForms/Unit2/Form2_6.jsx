@@ -12,6 +12,7 @@ export default function Form2_6({
 
     return (
         <div className="graph-form">
+            {graphName}
             <form>
                 <label className="string-input">
                     f1:

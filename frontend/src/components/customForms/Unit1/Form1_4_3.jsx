@@ -17,6 +17,7 @@ export default function Form1_4_3({
 
     return (
         <div className="graph-form">
+            {graphName}
             <form>
                 <label className="number-input">
                     Point - xo:

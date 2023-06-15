@@ -20,6 +20,7 @@ export default function Form1_2({
 
     return (
         <div className="graph-form">
+            {graphName}
             <form>
                 <label className="number-input">
                     Vector 1 - X:

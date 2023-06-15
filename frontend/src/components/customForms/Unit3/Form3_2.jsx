@@ -14,6 +14,7 @@ export default function Form3_2({
 
     return (
         <div className="graph-form">
+            {graphName}
             <form>
                 <label className="string-input">
                     función f:

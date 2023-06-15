@@ -16,6 +16,7 @@ export default function FormPoints({
 
     return (
         <div className="graph-form">
+            {graphName}
             <form>
                 <label className="number-input">
                     Point A - X:

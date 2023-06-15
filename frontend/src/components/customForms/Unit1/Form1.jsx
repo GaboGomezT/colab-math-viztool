@@ -11,6 +11,7 @@ export default function Form1({
     const [rz, setRz] = useState(0);
     return (
         <div className="graph-form">
+            {graphName}
             <form>
                 <label className="number-input">
                     rx:
