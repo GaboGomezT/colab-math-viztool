@@ -91,56 +91,55 @@ export default function DoubleIntegral3_2({
                     components.push(cuttingPlane);
                 }
             }
+            for (let i = 0; i < n; i++) {
+                const a = i * 2;
+                const b = a + 2;
+
+                planeIndices.push(a, a + 1, b);
+                planeIndices.push(a + 1, b, b + 1);
+            }
+
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    const a = i * (n + 1) + j;
+                    const b = a + n + 1;
+
+                    indices.push(a, b, a + 1);
+                    indices.push(a + 1, b, b + 1);
+                }
+            }
+
+            geometry.setAttribute(
+                "position",
+                new THREE.Float32BufferAttribute(vertices, 3)
+            );
+            geometry.setIndex(indices);
+            geometry.computeVertexNormals();
+
+            planeGeometry.setAttribute(
+                "position",
+                new THREE.Float32BufferAttribute(planeVertices, 3)
+            );
+            planeGeometry.setIndex(planeIndices);
+
+            // Crear el material y el objeto de malla
+            const material = new THREE.MeshBasicMaterial({
+                color: 0x00ff00,
+                side: THREE.DoubleSide,
+                opacity: 0.5,
+                transparent: true,
+            });
+            const mesh = new THREE.Mesh(geometry, material);
+            const plane = new THREE.Mesh(planeGeometry, domainMaterial);
+            components.push(mesh, plane);
+
+            setSceneComponents(components);
         } catch (error) {
             console.error(error);
             setDescription(
                 "Error en la función o en los límites de integración"
             );
         }
-
-        for (let i = 0; i < n; i++) {
-            const a = i * 2;
-            const b = a + 2;
-
-            planeIndices.push(a, a + 1, b);
-            planeIndices.push(a + 1, b, b + 1);
-        }
-
-        for (let i = 0; i < n; i++) {
-            for (let j = 0; j < n; j++) {
-                const a = i * (n + 1) + j;
-                const b = a + n + 1;
-
-                indices.push(a, b, a + 1);
-                indices.push(a + 1, b, b + 1);
-            }
-        }
-
-        geometry.setAttribute(
-            "position",
-            new THREE.Float32BufferAttribute(vertices, 3)
-        );
-        geometry.setIndex(indices);
-        geometry.computeVertexNormals();
-
-        planeGeometry.setAttribute(
-            "position",
-            new THREE.Float32BufferAttribute(planeVertices, 3)
-        );
-        planeGeometry.setIndex(planeIndices);
-
-        // Crear el material y el objeto de malla
-        const material = new THREE.MeshBasicMaterial({
-            color: 0x00ff00,
-            side: THREE.DoubleSide,
-            opacity: 0.5,
-            transparent: true,
-        });
-        const mesh = new THREE.Mesh(geometry, material);
-        const plane = new THREE.Mesh(planeGeometry, domainMaterial);
-        components.push(mesh, plane);
-
-        setSceneComponents(components);
     }, []);
 
     return (
