@@ -49,50 +49,55 @@ export default function VectorDivergence2_7({
 
         let minDivergence = Infinity;
         let maxDivergence = -Infinity;
-        // Compute min and max divergence
-        for (let y = minY; y <= maxY; y += resolution) {
-            for (let x = minX; x <= maxX; x += resolution) {
-                for (let z = minZ; z <= maxZ; z += resolution) {
-                    const divergence =
-                        F1_dx.evaluate({ x: x, y: y, z: z }) +
-                        F2_dy.evaluate({ x: x, y: y, z: z }) +
-                        F3_dz.evaluate({ x: x, y: y, z: z });
+        try {
+            // Compute min and max divergence
+            for (let y = minY; y <= maxY; y += resolution) {
+                for (let x = minX; x <= maxX; x += resolution) {
+                    for (let z = minZ; z <= maxZ; z += resolution) {
+                        const divergence =
+                            F1_dx.evaluate({ x: x, y: y, z: z }) +
+                            F2_dy.evaluate({ x: x, y: y, z: z }) +
+                            F3_dz.evaluate({ x: x, y: y, z: z });
 
-                    minDivergence = Math.min(minDivergence, divergence);
-                    maxDivergence = Math.max(maxDivergence, divergence);
+                        minDivergence = Math.min(minDivergence, divergence);
+                        maxDivergence = Math.max(maxDivergence, divergence);
+                    }
                 }
             }
-        }
 
-        // Compute min and max divergence
-        for (let y = minY; y <= maxY; y += resolution) {
-            for (let x = minX; x <= maxX; x += resolution) {
-                for (let z = minZ; z <= maxZ; z += resolution) {
-                    const divergence =
-                        F1_dx.evaluate({ x: x, y: y, z: z }) +
-                        F2_dy.evaluate({ x: x, y: y, z: z }) +
-                        F3_dz.evaluate({ x: x, y: y, z: z });
+            // Compute min and max divergence
+            for (let y = minY; y <= maxY; y += resolution) {
+                for (let x = minX; x <= maxX; x += resolution) {
+                    for (let z = minZ; z <= maxZ; z += resolution) {
+                        const divergence =
+                            F1_dx.evaluate({ x: x, y: y, z: z }) +
+                            F2_dy.evaluate({ x: x, y: y, z: z }) +
+                            F3_dz.evaluate({ x: x, y: y, z: z });
 
-                    const color = getColor(
-                        divergence,
-                        minDivergence,
-                        maxDivergence
-                    );
+                        const color = getColor(
+                            divergence,
+                            minDivergence,
+                            maxDivergence
+                        );
 
-                    const geometry = new THREE.PlaneGeometry(
-                        resolution,
-                        resolution
-                    );
-                    const material = new THREE.MeshBasicMaterial({
-                        side: THREE.DoubleSide,
-                        color: color,
-                    });
-                    const plane = new THREE.Mesh(geometry, material);
-                    plane.rotation.x = Math.PI / 2; // Rotate the plane to make it parallel to the XZ plane
-                    plane.position.set(x, y, z);
-                    components.push(plane);
+                        const geometry = new THREE.PlaneGeometry(
+                            resolution,
+                            resolution
+                        );
+                        const material = new THREE.MeshBasicMaterial({
+                            side: THREE.DoubleSide,
+                            color: color,
+                        });
+                        const plane = new THREE.Mesh(geometry, material);
+                        plane.rotation.x = Math.PI / 2; // Rotate the plane to make it parallel to the XZ plane
+                        plane.position.set(x, y, z);
+                        components.push(plane);
+                    }
                 }
             }
+        } catch (error) {
+            console.error(error);
+            setDescription("Error en alguna de las funciones.");
         }
 
         setSceneComponents(components);

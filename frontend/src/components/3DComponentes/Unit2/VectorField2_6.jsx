@@ -29,26 +29,31 @@ export default function VectorField2_6({
         const maxZ = 5;
         const resolution = 2;
 
-        // Create the grid of vectors
-        for (let x = minX; x <= maxX; x += resolution) {
-            for (let y = minY; y <= maxY; y += resolution) {
-                for (let z = minZ; z <= maxZ; z += resolution) {
-                    const vector = new THREE.Vector3(
-                        F1.evaluate({ x: x, y: y, z: z }),
-                        F2.evaluate({ x: x, y: y, z: z }),
-                        F3.evaluate({ x: x, y: y, z: z })
-                    );
-                    vector.normalize();
+        try {
+            // Create the grid of vectors
+            for (let x = minX; x <= maxX; x += resolution) {
+                for (let y = minY; y <= maxY; y += resolution) {
+                    for (let z = minZ; z <= maxZ; z += resolution) {
+                        const vector = new THREE.Vector3(
+                            F1.evaluate({ x: x, y: y, z: z }),
+                            F2.evaluate({ x: x, y: y, z: z }),
+                            F3.evaluate({ x: x, y: y, z: z })
+                        );
+                        vector.normalize();
 
-                    const arrow = new THREE.ArrowHelper(
-                        vector,
-                        new THREE.Vector3(x, y, z),
-                        resolution,
-                        0x000000
-                    );
-                    components.push(arrow);
+                        const arrow = new THREE.ArrowHelper(
+                            vector,
+                            new THREE.Vector3(x, y, z),
+                            resolution,
+                            0x000000
+                        );
+                        components.push(arrow);
+                    }
                 }
             }
+        } catch (error) {
+            console.error(error);
+            setDescription("Error en alguna función");
         }
 
         setSceneComponents(components);

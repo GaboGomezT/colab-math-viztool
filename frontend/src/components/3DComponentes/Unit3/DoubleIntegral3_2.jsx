@@ -10,6 +10,7 @@ export default function DoubleIntegral3_2({
     canEdit,
 }) {
     const [sceneComponents, setSceneComponents] = useState([]);
+    const [description, setDescription] = useState("");
 
     useEffect(() => {
         let components = [];
@@ -48,43 +49,53 @@ export default function DoubleIntegral3_2({
             opacity: 0.5,
         });
 
-        for (let i = 0; i <= n; i++) {
-            const y = c + i * dy;
-            const xStart = a_expr.evaluate({ y: y });
-            const xEnd = b_expr.evaluate({ y: y });
-            const dx = (xEnd - xStart) / n;
+        try {
+            for (let i = 0; i <= n; i++) {
+                const y = c + i * dy;
+                const xStart = a_expr.evaluate({ y: y });
+                const xEnd = b_expr.evaluate({ y: y });
+                const dx = (xEnd - xStart) / n;
 
-            planeVertices.push(xStart, y, 0);
-            planeVertices.push(xEnd, y, 0);
+                planeVertices.push(xStart, y, 0);
+                planeVertices.push(xEnd, y, 0);
 
-            for (let j = 0; j <= n; j++) {
-                const x = xStart + j * dx;
-                const z = f_expr.evaluate({ x: x, y: y });
-                vertices.push(x, y, z);
-            }
-
-            // Crea los planos que se cortan con la función
-            if (i % Math.floor(n / numPlanes) === 0) {
-                const cuttingPlaneGeometry = new THREE.BufferGeometry();
-                const cuttingPlaneVertices = [];
                 for (let j = 0; j <= n; j++) {
                     const x = xStart + j * dx;
                     const z = f_expr.evaluate({ x: x, y: y });
-                    cuttingPlaneVertices.push(x, y, 0);
-                    cuttingPlaneVertices.push(x, y, z);
+                    vertices.push(x, y, z);
                 }
 
-                cuttingPlaneGeometry.setAttribute(
-                    "position",
-                    new THREE.Float32BufferAttribute(cuttingPlaneVertices, 3)
-                );
+                // Crea los planos que se cortan con la función
+                if (i % Math.floor(n / numPlanes) === 0) {
+                    const cuttingPlaneGeometry = new THREE.BufferGeometry();
+                    const cuttingPlaneVertices = [];
+                    for (let j = 0; j <= n; j++) {
+                        const x = xStart + j * dx;
+                        const z = f_expr.evaluate({ x: x, y: y });
+                        cuttingPlaneVertices.push(x, y, 0);
+                        cuttingPlaneVertices.push(x, y, z);
+                    }
 
-                const cuttingPlane = new THREE.Mesh(
-                    cuttingPlaneGeometry,
-                    planeMaterial
-                );
-                components.push(cuttingPlane);
+                    cuttingPlaneGeometry.setAttribute(
+                        "position",
+                        new THREE.Float32BufferAttribute(
+                            cuttingPlaneVertices,
+                            3
+                        )
+                    );
+
+                    const cuttingPlane = new THREE.Mesh(
+                        cuttingPlaneGeometry,
+                        planeMaterial
+                    );
+                    components.push(cuttingPlane);
+                }
             }
+        } catch (error) {
+            console.error(error);
+            setDescription(
+                "Error en la función o en los límites de integración"
+            );
         }
 
         for (let i = 0; i < n; i++) {
@@ -135,6 +146,7 @@ export default function DoubleIntegral3_2({
     return (
         <CoordinateSystem
             sceneComponents={sceneComponents}
+            description={description}
             id={id}
             handleDeleteGraph={handleDeleteGraph}
             canEdit={canEdit}
